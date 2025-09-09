@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { useClothesStore } from "../../stores/clothesStore";
+import { useRouter } from "next/navigation";
 
 export default function SelectClothes() {
     const {
@@ -15,6 +16,7 @@ export default function SelectClothes() {
         deleteBottomImage,
     } = useClothesStore();
 
+    const router = useRouter();
     const [showPopup, setShowPopup] = useState(false);
     const [currentUploadType, setCurrentUploadType] = useState<string | null>(
         null,
@@ -330,19 +332,25 @@ export default function SelectClothes() {
                             </g>
                         </svg>
                     </div>
-                    <div
+                    <button
+                        onClick={() => {
+                            if (uploadedClothes.length > 0) {
+                                router.push("/select-photo");
+                            }
+                        }}
                         className={`flex-1 h-16 py-4 rounded-tl-xl rounded-tr-[100px] rounded-bl-xl rounded-br-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden transition-colors ${
                             uploadedClothes.length > 0
-                                ? "bg-[#E20181]"
-                                : "bg-[#AA8B9C]"
+                                ? "bg-[#E20181] cursor-pointer"
+                                : "bg-[#AA8B9C] cursor-not-allowed"
                         }`}
+                        disabled={uploadedClothes.length === 0}
                     >
                         <div className="justify-start text-white text-base font-semibold font-['Pretendard'] leading-snug">
                             {uploadedClothes.length > 0
                                 ? "다음"
                                 : "하나 이상 업로드해주세요"}
                         </div>
-                    </div>
+                    </button>
                 </div>
             </div>
 
