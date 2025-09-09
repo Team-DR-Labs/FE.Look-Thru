@@ -9,6 +9,7 @@ interface ClothesState {
     setPersonImage: (image: string) => void;
     deleteTopImage: () => void;
     deleteBottomImage: () => void;
+    clearAllImages: () => void;
 }
 
 export const useClothesStore = create<ClothesState>((set) => ({
@@ -20,4 +21,6 @@ export const useClothesStore = create<ClothesState>((set) => ({
     setPersonImage: (image) => set({ personImage: image }),
     deleteTopImage: () => set({ topImage: null }),
     deleteBottomImage: () => set({ bottomImage: null }),
+    clearAllImages: () =>
+        set({ topImage: null, bottomImage: null, personImage: null }),
 }));
