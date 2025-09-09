@@ -1,14 +1,21 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { useClothesStore } from "../../stores/clothesStore";
 import { useRouter } from "next/navigation";
 
 export default function SelectPhoto() {
-    const { personImage, setPersonImage } = useClothesStore();
+    const { personImage, setPersonImage, topImage, bottomImage } =
+        useClothesStore();
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (!topImage && !bottomImage) {
+            router.replace("/select-clothes");
+        }
+    }, [topImage, bottomImage, router]);
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -27,6 +34,10 @@ export default function SelectPhoto() {
             // router.push('/result');
         }
     };
+
+    if (!topImage && !bottomImage) {
+        return null; // 리디렉션 중 렌더링 방지
+    }
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-0 md:p-8">
