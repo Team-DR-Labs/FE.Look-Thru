@@ -21,7 +21,7 @@ export default function ProcessingPage() {
             setProgress((prevProgress) => {
                 if (prevProgress >= 100) {
                     clearInterval(timer);
-                    // router.push("/result"); // TODO: 결과 페이지로 이동
+                    router.push("/done"); // TODO: 결과 페이지로 이동
                     return 100;
                 }
                 return prevProgress + 1;
