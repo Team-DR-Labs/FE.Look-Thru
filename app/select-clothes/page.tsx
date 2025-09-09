@@ -2,12 +2,19 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
+import toast from "react-hot-toast";
+import { useClothesStore } from "../../stores/clothesStore";
 
 export default function SelectClothes() {
-    const [uploadedClothes, setUploadedClothes] = useState<
-        { type: string; image: string; id: number }[]
-    >([]);
-    const [nextId, setNextId] = useState(0);
+    const {
+        topImage,
+        bottomImage,
+        setTopImage,
+        setBottomImage,
+        deleteTopImage,
+        deleteBottomImage,
+    } = useClothesStore();
+
     const [showPopup, setShowPopup] = useState(false);
     const [currentUploadType, setCurrentUploadType] = useState<string | null>(
         null,
@@ -19,13 +26,12 @@ export default function SelectClothes() {
         if (file && currentUploadType) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                const newCloth = {
-                    id: nextId,
-                    type: currentUploadType,
-                    image: e.target?.result as string,
-                };
-                setUploadedClothes([...uploadedClothes, newCloth]);
-                setNextId(nextId + 1);
+                const imageUrl = e.target?.result as string;
+                if (currentUploadType === "상의") {
+                    setTopImage(imageUrl);
+                } else if (currentUploadType === "하의") {
+                    setBottomImage(imageUrl);
+                }
                 setCurrentUploadType(null); // Reset after upload
             };
             reader.readAsDataURL(file);
@@ -45,8 +51,12 @@ export default function SelectClothes() {
         }, 300); // Duration should be same as popup close animation
     };
 
-    const handleDeleteCloth = (id: number) => {
-        setUploadedClothes(uploadedClothes.filter((cloth) => cloth.id !== id));
+    const handleDeleteCloth = (type: "상의" | "하의") => {
+        if (type === "상의") {
+            deleteTopImage();
+        } else {
+            deleteBottomImage();
+        }
     };
 
     const closePopup = () => {
@@ -58,6 +68,22 @@ export default function SelectClothes() {
         { name: "하의", emoji: "👖", desc: "반바지, 긴바지 등..." },
     ];
 
+    const uploadedClothes = [];
+    if (topImage) uploadedClothes.push({ type: "상의", image: topImage });
+    if (bottomImage) uploadedClothes.push({ type: "하의", image: bottomImage });
+
+    const hasTop = !!topImage;
+    const hasBottom = !!bottomImage;
+    const isFull = hasTop && hasBottom;
+
+    const handleAddClick = () => {
+        if (isFull) {
+            toast.error("상의, 하의 하나씩만 선택할 수 있어요");
+        } else {
+            setShowPopup(true);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-0 md:p-8">
             {/* Desktop Frame - 모바일에서는 숨김 */}
@@ -65,7 +91,7 @@ export default function SelectClothes() {
                 <div
                     className="absolute inset-0 opacity-50"
                     style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f0f0f0' fill-opacity='0.3'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f0f0f0' fill-opacity='0.3'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
                     }}
                 ></div>
             </div>
@@ -153,34 +179,36 @@ export default function SelectClothes() {
                     {uploadedClothes.length > 0 ? (
                         <>
                             {/* 옷 추가하기 버튼 */}
-                            <button
-                                onClick={() => setShowPopup(true)}
-                                className="pl-4 pr-5 py-2.5 bg-white/70 rounded-[100px] outline outline-2 outline-offset-[-2px] outline-white inline-flex justify-center items-center gap-1.5 hover:bg-white/80 transition-colors"
-                            >
-                                <svg
-                                    width="21"
-                                    height="20"
-                                    viewBox="0 0 21 20"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
+                            {!isFull && (
+                                <button
+                                    onClick={handleAddClick}
+                                    className="pl-4 pr-5 py-2.5 bg-white/70 rounded-[100px] outline outline-2 outline-offset-[-2px] outline-white inline-flex justify-center items-center gap-1.5 hover:bg-white/80 transition-colors"
                                 >
-                                    <path
-                                        d="M7.16667 6.33333V15.8333H13.8333V6.33333L16.4006 7.74208L17.2596 6.29166L13.6844 4.19229H13.4198C13.2916 4.89534 12.9594 5.48347 12.4231 5.95666C11.8867 6.43 11.2457 6.66666 10.5 6.66666C9.75431 6.66666 9.11327 6.43 8.57688 5.95666C8.04063 5.48347 7.70841 4.89534 7.58021 4.19229H7.31563L3.74042 6.29166L4.59938 7.74208L7.16667 6.33333Z"
-                                        fill="black"
-                                        fillOpacity="0.5"
-                                    />
-                                </svg>
+                                    <svg
+                                        width="21"
+                                        height="20"
+                                        viewBox="0 0 21 20"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            d="M7.16667 6.33333V15.8333H13.8333V6.33333L16.4006 7.74208L17.2596 6.29166L13.6844 4.19229H13.4198C13.2916 4.89534 12.9594 5.48347 12.4231 5.95666C11.8867 6.43 11.2457 6.66666 10.5 6.66666C9.75431 6.66666 9.11327 6.43 8.57688 5.95666C8.04063 5.48347 7.70841 4.89534 7.58021 4.19229H7.31563L3.74042 6.29166L4.59938 7.74208L7.16667 6.33333Z"
+                                            fill="black"
+                                            fillOpacity="0.5"
+                                        />
+                                    </svg>
 
-                                <div className="text-center text-black/50 text-sm font-medium font-['Pretendard'] leading-tight">
-                                    옷 추가하기
-                                </div>
-                            </button>
+                                    <div className="text-center text-black/50 text-sm font-medium font-['Pretendard'] leading-tight">
+                                        옷 추가하기
+                                    </div>
+                                </button>
+                            )}
 
                             {/* 업로드된 옷 목록 */}
                             <div className="w-full grid grid-cols-2 gap-4">
                                 {uploadedClothes.map((cloth) => (
                                     <div
-                                        key={cloth.id}
+                                        key={cloth.type}
                                         className="relative aspect-square bg-white rounded-2xl shadow-lg overflow-hidden"
                                     >
                                         <Image
@@ -196,7 +224,11 @@ export default function SelectClothes() {
                                         {/* 삭제 버튼 */}
                                         <button
                                             onClick={() =>
-                                                handleDeleteCloth(cloth.id)
+                                                handleDeleteCloth(
+                                                    cloth.type as
+                                                        | "상의"
+                                                        | "하의",
+                                                )
                                             }
                                             className="absolute top-2 right-2 bg-red-500 bg-opacity-80 text-white rounded-full p-1.5"
                                         >
@@ -342,29 +374,52 @@ export default function SelectClothes() {
                         {/* 옷 종류 목록 */}
                         <div className="px-6 py-6">
                             <div className="space-y-4">
-                                {clothesTypes.map((item) => (
-                                    <button
-                                        key={item.name}
-                                        onClick={() =>
-                                            handleTypeSelect(item.name)
-                                        }
-                                        className="w-full p-4 rounded-2xl border-2 border-gray-200 bg-white hover:border-pink-200 hover:bg-pink-50 transition-all"
-                                    >
-                                        <div className="flex items-center gap-4">
-                                            <div className="text-3xl">
-                                                {item.emoji}
-                                            </div>
-                                            <div className="flex-1 text-left">
-                                                <div className="font-semibold text-gray-900 font-['Pretendard']">
-                                                    {item.name}
+                                {clothesTypes.map((item) => {
+                                    const isUploaded =
+                                        (item.name === "상의" && hasTop) ||
+                                        (item.name === "하의" && hasBottom);
+                                    return (
+                                        <button
+                                            key={item.name}
+                                            onClick={() =>
+                                                !isUploaded &&
+                                                handleTypeSelect(item.name)
+                                            }
+                                            disabled={isUploaded}
+                                            className={`w-full p-4 rounded-2xl border-2 transition-all ${
+                                                isUploaded
+                                                    ? "border-gray-200 bg-gray-100 cursor-not-allowed"
+                                                    : "border-gray-200 bg-white hover:border-pink-200 hover:bg-pink-50"
+                                            }`}
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <div
+                                                    className={`text-3xl ${
+                                                        isUploaded
+                                                            ? "opacity-50"
+                                                            : ""
+                                                    }`}
+                                                >
+                                                    {item.emoji}
                                                 </div>
-                                                <div className="text-sm text-gray-500 font-['Pretendard']">
-                                                    {item.desc}
+                                                <div
+                                                    className={`flex-1 text-left ${
+                                                        isUploaded
+                                                            ? "opacity-50"
+                                                            : ""
+                                                    }`}
+                                                >
+                                                    <div className="font-semibold text-gray-900 font-['Pretendard']">
+                                                        {item.name}
+                                                    </div>
+                                                    <div className="text-sm text-gray-500 font-['Pretendard']">
+                                                        {item.desc}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </button>
-                                ))}
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
