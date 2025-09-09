@@ -31,7 +31,7 @@ export default function SelectPhoto() {
     const handleNextClick = () => {
         if (personImage) {
             // 다음 페이지로 이동하는 로직 (예: 결과 페이지)
-            // router.push('/result');
+            router.push("/confirm");
         }
     };
 
