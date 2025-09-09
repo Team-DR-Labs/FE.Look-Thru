@@ -4,48 +4,59 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 
 export default function SelectClothes() {
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [uploadedClothes, setUploadedClothes] = useState<
+        { type: string; image: string; id: number }[]
+    >([]);
+    const [nextId, setNextId] = useState(0);
     const [showPopup, setShowPopup] = useState(false);
-    const [selectedClothes, setSelectedClothes] = useState<string[]>([]);
+    const [currentUploadType, setCurrentUploadType] = useState<string | null>(
+        null,
+    );
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        if (file) {
+        if (file && currentUploadType) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                setSelectedImage(e.target?.result as string);
+                const newCloth = {
+                    id: nextId,
+                    type: currentUploadType,
+                    image: e.target?.result as string,
+                };
+                setUploadedClothes([...uploadedClothes, newCloth]);
+                setNextId(nextId + 1);
+                setCurrentUploadType(null); // Reset after upload
             };
             reader.readAsDataURL(file);
         }
+        // Clear the file input value to allow uploading the same file again
+        if (event.target) {
+            event.target.value = "";
+        }
     };
 
-    const handleUploadClick = () => {
-        if (selectedClothes.length === 0) {
-            setShowPopup(true);
-        } else {
+    const handleTypeSelect = (type: string) => {
+        setCurrentUploadType(type);
+        setShowPopup(false);
+        // Use a timeout to ensure state update and popup close animation starts before file dialog opens
+        setTimeout(() => {
             fileInputRef.current?.click();
-        }
+        }, 300); // Duration should be same as popup close animation
     };
 
-    const handleClothesSelect = (type: string) => {
-        if (selectedClothes.includes(type)) {
-            setSelectedClothes(selectedClothes.filter((item) => item !== type));
-        } else {
-            setSelectedClothes([...selectedClothes, type]);
-        }
+    const handleDeleteCloth = (id: number) => {
+        setUploadedClothes(uploadedClothes.filter((cloth) => cloth.id !== id));
     };
 
     const closePopup = () => {
         setShowPopup(false);
     };
 
-    const confirmSelection = () => {
-        setShowPopup(false);
-        if (selectedClothes.length > 0) {
-            fileInputRef.current?.click();
-        }
-    };
+    const clothesTypes = [
+        { name: "상의", emoji: "👕", desc: "반팔, 후드티 등..." },
+        { name: "하의", emoji: "👖", desc: "반바지, 긴바지 등..." },
+    ];
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-0 md:p-8">
@@ -139,70 +150,12 @@ export default function SelectClothes() {
 
                 {/* Main Content */}
                 <div className="flex-1 px-5 pt-8 flex flex-col justify-start items-center gap-6">
-                    {selectedImage ? (
-                        <div className="relative w-full max-w-sm aspect-square bg-white rounded-2xl shadow-lg overflow-hidden">
-                            <Image
-                                src={selectedImage || ""}
-                                alt="Selected clothing"
-                                fill
-                                className="object-cover"
-                            />
+                    {uploadedClothes.length > 0 ? (
+                        <>
+                            {/* 옷 추가하기 버튼 */}
                             <button
-                                onClick={() => setSelectedImage(null)}
-                                className="absolute top-2 right-2 bg-black bg-opacity-50 text-white rounded-full p-2"
-                            >
-                                <svg
-                                    width="16"
-                                    height="16"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                >
-                                    <path
-                                        d="M18 6L6 18M6 6L18 18"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    ) : selectedClothes.length > 0 ? (
-                        <div className="w-full flex flex-col items-center gap-6">
-                            <div className="text-center">
-                                <div className="text-lg font-medium text-gray-700 mb-2">
-                                    옷 추가하기
-                                </div>
-                                <div className="text-sm text-gray-500">
-                                    선택된 종류의 옷 이미지를 업로드해주세요
-                                </div>
-                            </div>
-
-                            {/* 선택된 옷 목록 */}
-                            <div className="flex flex-wrap gap-3 justify-center">
-                                {selectedClothes.map((item, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex items-center gap-2 bg-pink-100 px-4 py-2 rounded-full"
-                                    >
-                                        <span className="text-sm font-medium text-pink-700">
-                                            {item}
-                                        </span>
-                                        <button
-                                            onClick={() =>
-                                                handleClothesSelect(item)
-                                            }
-                                            className="w-4 h-4 bg-pink-600 text-white rounded-full flex items-center justify-center text-xs"
-                                        >
-                                            ×
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <button
-                                onClick={handleUploadClick}
-                                className="pl-6 pr-7 py-3 bg-white/50 rounded-[100px] outline outline-2 outline-offset-[-2px] outline-white inline-flex justify-center items-center gap-2 overflow-hidden hover:bg-white/60 transition-colors"
+                                onClick={() => setShowPopup(true)}
+                                className="pl-4 pr-5 py-2.5 bg-white/70 rounded-[100px] outline outline-2 outline-offset-[-2px] outline-white inline-flex justify-center items-center gap-1.5 hover:bg-white/80 transition-colors"
                             >
                                 <svg
                                     width="21"
@@ -211,37 +164,64 @@ export default function SelectClothes() {
                                     fill="none"
                                     xmlns="http://www.w3.org/2000/svg"
                                 >
-                                    <mask
-                                        id="mask0_18_574"
-                                        style={{ maskType: "alpha" }}
-                                        maskUnits="userSpaceOnUse"
-                                        x="0"
-                                        y="0"
-                                        width="21"
-                                        height="20"
-                                    >
-                                        <rect
-                                            x="0.5"
-                                            width="20"
-                                            height="20"
-                                            fill="#D9D9D9"
-                                        />
-                                    </mask>
-                                    <g mask="url(#mask0_18_574)">
-                                        <path
-                                            d="M3.20831 16.25C3.03123 16.25 2.88283 16.1904 2.7631 16.0712C2.64324 15.9521 2.58331 15.8044 2.58331 15.6281C2.58331 15.5245 2.60442 15.4281 2.64665 15.339C2.68887 15.2498 2.7522 15.179 2.83665 15.1267L9.87498 9.88792V8.41354C9.87498 8.23646 9.9372 8.08799 10.0616 7.96812C10.1861 7.8484 10.3365 7.78854 10.5129 7.78854C10.8975 7.78854 11.2252 7.65014 11.496 7.37333C11.7669 7.09639 11.9023 6.76569 11.9023 6.38125C11.9023 5.99681 11.7667 5.67049 11.4956 5.40229C11.2245 5.1341 10.8953 5 10.5079 5C10.1233 5 9.79345 5.13479 9.51831 5.40437C9.24331 5.67382 9.10581 6.00111 9.10581 6.38625H7.85581C7.85581 5.65542 8.1138 5.03333 8.62977 4.52C9.14588 4.00667 9.77192 3.75 10.5079 3.75C11.244 3.75 11.8688 4.00458 12.3823 4.51375C12.8956 5.02278 13.1523 5.64535 13.1523 6.38146C13.1523 7.00215 12.9639 7.54944 12.5873 8.02333C12.2107 8.49708 11.7233 8.80715 11.125 8.95354V9.88792L18.1714 15.1267C18.2559 15.1786 18.3191 15.2488 18.3612 15.3373C18.4035 15.4256 18.4246 15.5218 18.4246 15.6258C18.4246 15.8026 18.3647 15.9508 18.245 16.0704C18.1251 16.1901 17.9766 16.25 17.7996 16.25H3.20831ZM5.09935 15H15.9087L10.5 10.9856L5.09935 15Z"
-                                            fill="black"
-                                            fillOpacity="0.5"
-                                        />
-                                    </g>
+                                    <path
+                                        d="M7.16667 6.33333V15.8333H13.8333V6.33333L16.4006 7.74208L17.2596 6.29166L13.6844 4.19229H13.4198C13.2916 4.89534 12.9594 5.48347 12.4231 5.95666C11.8867 6.43 11.2457 6.66666 10.5 6.66666C9.75431 6.66666 9.11327 6.43 8.57688 5.95666C8.04063 5.48347 7.70841 4.89534 7.58021 4.19229H7.31563L3.74042 6.29166L4.59938 7.74208L7.16667 6.33333Z"
+                                        fill="black"
+                                        fillOpacity="0.5"
+                                    />
                                 </svg>
-                                <div className="text-center justify-start text-black/50 text-base font-medium font-['Pretendard'] leading-snug">
-                                    이미지 업로드
+
+                                <div className="text-center text-black/50 text-sm font-medium font-['Pretendard'] leading-tight">
+                                    옷 추가하기
                                 </div>
                             </button>
-                        </div>
+
+                            {/* 업로드된 옷 목록 */}
+                            <div className="w-full grid grid-cols-2 gap-4">
+                                {uploadedClothes.map((cloth) => (
+                                    <div
+                                        key={cloth.id}
+                                        className="relative aspect-square bg-white rounded-2xl shadow-lg overflow-hidden"
+                                    >
+                                        <Image
+                                            src={cloth.image}
+                                            alt={cloth.type}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                        {/* 종류 태그 */}
+                                        <div className="absolute top-2 left-2 bg-gray-100 bg-opacity-80 text-gray-800 text-xs font-semibold px-2 py-1 rounded-full">
+                                            {cloth.type}
+                                        </div>
+                                        {/* 삭제 버튼 */}
+                                        <button
+                                            onClick={() =>
+                                                handleDeleteCloth(cloth.id)
+                                            }
+                                            className="absolute top-2 right-2 bg-red-500 bg-opacity-80 text-white rounded-full p-1.5"
+                                        >
+                                            <svg
+                                                width="12"
+                                                height="12"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                stroke="white"
+                                                strokeWidth="2"
+                                            >
+                                                <path d="M3 6h18m-2 0v14c0 1.1-.9 2-2 2H8c-1.1 0-2-.9-2-2V6m3 0V4c0-1.1.9-2 2-2h4c1.1 0 2 .9 2 2v2" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
                     ) : (
-                        <div className="w-96 py-6 bg-white/50 rounded-2xl outline outline-4 outline-offset-[-4px] outline-white inline-flex flex-col justify-center items-center gap-4 overflow-hidden">
+                        // 초기 업로드 화면
+                        <div
+                            onClick={() => setShowPopup(true)}
+                            className="w-96 py-6 bg-white/50 rounded-2xl outline outline-4 outline-offset-[-4px] outline-white inline-flex flex-col justify-center items-center gap-4 overflow-hidden cursor-pointer"
+                        >
                             <svg
                                 width="49"
                                 height="48"
@@ -279,7 +259,6 @@ export default function SelectClothes() {
                             </div>
                         </div>
                     )}
-
                     {/* Hidden File Input */}
                     <input
                         ref={fileInputRef}
@@ -319,10 +298,17 @@ export default function SelectClothes() {
                             </g>
                         </svg>
                     </div>
-                    <div className="flex-1 h-16 py-4 bg-[#AA8B9C] rounded-tl-xl rounded-tr-[100px] rounded-bl-xl rounded-br-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden">
+                    <div
+                        className={`flex-1 h-16 py-4 rounded-tl-xl rounded-tr-[100px] rounded-bl-xl rounded-br-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden transition-colors ${
+                            uploadedClothes.length > 0
+                                ? "bg-[#E20181]"
+                                : "bg-[#AA8B9C]"
+                        }`}
+                    >
                         <div className="justify-start text-white text-base font-semibold font-['Pretendard'] leading-snug">
-                            {" "}
-                            하나 이상 업로드해주세요
+                            {uploadedClothes.length > 0
+                                ? "다음"
+                                : "하나 이상 업로드해주세요"}
                         </div>
                     </div>
                 </div>
@@ -330,15 +316,13 @@ export default function SelectClothes() {
 
             {/* 종류 선택 팝업 */}
             {showPopup && (
-                <div className="fixed inset-0 z-50 flex items-end justify-center md:items-center">
-                    {/* 배경 오버레이 */}
-                    <div
-                        className="absolute inset-0 bg-black bg-opacity-50"
-                        onClick={closePopup}
-                    ></div>
-
+                <div
+                    className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm md:items-center"
+                    onClick={closePopup}
+                >
                     {/* 팝업 컨텐츠 */}
                     <div
+                        onClick={(e) => e.stopPropagation()}
                         className={`relative w-full md:w-96 bg-white rounded-t-3xl md:rounded-3xl transform transition-transform duration-300 ${
                             showPopup ? "translate-y-0" : "translate-y-full"
                         }`}
@@ -358,28 +342,13 @@ export default function SelectClothes() {
                         {/* 옷 종류 목록 */}
                         <div className="px-6 py-6">
                             <div className="space-y-4">
-                                {[
-                                    {
-                                        name: "상의",
-                                        emoji: "👕",
-                                        desc: "반팔, 후드티 등...",
-                                    },
-                                    {
-                                        name: "하의",
-                                        emoji: "👖",
-                                        desc: "반바지, 긴바지 등...",
-                                    },
-                                ].map((item) => (
+                                {clothesTypes.map((item) => (
                                     <button
                                         key={item.name}
                                         onClick={() =>
-                                            handleClothesSelect(item.name)
+                                            handleTypeSelect(item.name)
                                         }
-                                        className={`w-full p-4 rounded-2xl border-2 transition-all ${
-                                            selectedClothes.includes(item.name)
-                                                ? "border-pink-500 bg-pink-50"
-                                                : "border-gray-200 bg-white hover:border-pink-200 hover:bg-pink-25"
-                                        }`}
+                                        className="w-full p-4 rounded-2xl border-2 border-gray-200 bg-white hover:border-pink-200 hover:bg-pink-50 transition-all"
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className="text-3xl">
@@ -393,52 +362,9 @@ export default function SelectClothes() {
                                                     {item.desc}
                                                 </div>
                                             </div>
-                                            {selectedClothes.includes(
-                                                item.name,
-                                            ) && (
-                                                <div className="w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
-                                                    <svg
-                                                        width="16"
-                                                        height="16"
-                                                        viewBox="0 0 24 24"
-                                                        fill="none"
-                                                    >
-                                                        <path
-                                                            d="M9 12L11 14L15 10"
-                                                            stroke="white"
-                                                            strokeWidth="2"
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                        />
-                                                    </svg>
-                                                </div>
-                                            )}
                                         </div>
                                     </button>
                                 ))}
-                            </div>
-                        </div>
-
-                        {/* 팝업 하단 버튼 */}
-                        <div className="px-6 py-4 border-t border-gray-100">
-                            <div className="flex gap-3">
-                                <button
-                                    onClick={closePopup}
-                                    className="flex-1 py-3 px-4 bg-gray-100 text-gray-700 rounded-xl font-semibold font-['Pretendard'] hover:bg-gray-200 transition-colors"
-                                >
-                                    취소
-                                </button>
-                                <button
-                                    onClick={confirmSelection}
-                                    disabled={selectedClothes.length === 0}
-                                    className={`flex-1 py-3 px-4 rounded-xl font-semibold font-['Pretendard'] transition-colors ${
-                                        selectedClothes.length > 0
-                                            ? "bg-pink-600 text-white hover:bg-pink-700"
-                                            : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                                    }`}
-                                >
-                                    선택 완료
-                                </button>
                             </div>
                         </div>
                     </div>
