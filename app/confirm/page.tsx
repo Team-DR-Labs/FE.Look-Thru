@@ -167,7 +167,10 @@ export default function ConfirmPage() {
                             </g>
                         </svg>
                     </div>
-                    <div className="flex-1 h-16 py-4 bg-pink-600 rounded-tl-xl rounded-tr-[100px] rounded-bl-xl rounded-br-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden cursor-pointer">
+                    <div
+                        onClick={() => router.push("/processing")}
+                        className="flex-1 h-16 py-4 bg-pink-600 rounded-tl-xl rounded-tr-[100px] rounded-bl-xl rounded-br-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden cursor-pointer"
+                    >
                         <div className="justify-start text-white text-base font-semibold font-['Pretendard'] leading-snug">
                             입어보기 ✨
                         </div>
