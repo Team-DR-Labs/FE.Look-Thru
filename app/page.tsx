@@ -78,20 +78,31 @@ export default function Home() {
 
                 {/* Background Image - Add your image here */}
                 <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
-                    {/* <Image src="/path-to-your-image.png" alt="background" layout="fill" objectFit="cover" className="opacity-20" /> */}
+                    <picture>
+                        <source srcSet="https://fonts.gstatic.com/s/e/notoemoji/latest/1f52e/512.webp" type="image/webp" />
+                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f52e/512.gif" alt="🔮" width="256" height="256" />
+                    </picture>
                 </div>
 
                 {/* Bottom Navigation */}
-                <div className="w-full flex flex-col items-center">
-                    <div className="w-full p-4 bg-white rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
+                <div className="w-full flex flex-col items-center ">
+                    <div className="w-full p-4 bg-white rounded-tl-3xl rounded-tr-3xl inline-flex flex-col justify-start items-center gap-3">
                         <button
                             onClick={handleStartClick}
-                            className="flex-1 h-16 py-4 bg-pink-600 rounded-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
+                            className="w-full h-16 py-4 bg-pink-600 rounded-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
                         >
                             <div className="justify-start text-white text-base font-semibold leading-snug">
                                 시작하기
                             </div>
                         </button>
+                        <a
+                            href="https://lookthru.hashnode.space/default-guide/6rcc7j247kcv67o07lky66as67cp7lmo"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 text-sm font-medium leading-tight hover:underline mb-5"
+                        >
+                            개인정보보호정책 →
+                        </a>
                     </div>
                 </div>
             </div>
