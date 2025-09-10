@@ -124,7 +124,7 @@ export default function SelectClothes() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-0 md:p-8">
+        <div className="h-full bg-gray-100 flex items-center justify-center p-0 md:p-8">
             {/* Desktop Frame - 모바일에서는 숨김 */}
             <div className="hidden md:block absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200">
                 <div
@@ -136,7 +136,7 @@ export default function SelectClothes() {
             </div>
 
             {/* Mobile Container - Responsive Design */}
-            <div className="w-full h-screen md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
+            <div className="w-full h-full md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
                 {/* Back Button */}
                 <div className="px-4 py-4 pt-8 md:pt-4">
                     <button className="p-2">
@@ -342,7 +342,10 @@ export default function SelectClothes() {
 
                 {/* Bottom Navigation */}
                 <div className="self-stretch p-4 bg-white rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
-                    <div className="w-16 self-stretch bg-zinc-100 rounded-tl-[100px] rounded-tr-xl rounded-bl-[100px] rounded-br-xl flex justify-center items-center gap-2.5">
+                    <button
+                        onClick={() => router.back()}
+                        className="w-16 self-stretch bg-zinc-100 rounded-tl-[100px] rounded-tr-xl rounded-bl-[100px] rounded-br-xl flex justify-center items-center gap-2.5"
+                        >
                         <svg
                             width="24"
                             height="24"
@@ -368,7 +371,7 @@ export default function SelectClothes() {
                                 />
                             </g>
                         </svg>
-                    </div>
+                    </button>
                     <button
                         onClick={() => {
                             if (uploadedClothes.length > 0) {

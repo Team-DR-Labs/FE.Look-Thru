@@ -43,7 +43,7 @@ export default function SelectPhoto() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-0 md:p-8">
+        <div className="h-full bg-gray-100 flex items-center justify-center p-0 md:p-8">
             <div className="hidden md:block absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200">
                 <div
                     className="absolute inset-0 opacity-50"
@@ -53,7 +53,7 @@ export default function SelectPhoto() {
                 ></div>
             </div>
 
-            <div className="w-full h-screen md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
+            <div className="w-full h-full md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
                 {/* Back Button */}
                 <div className="px-4 py-4 pt-8 md:pt-4">
                     <button onClick={() => router.back()} className="p-2">

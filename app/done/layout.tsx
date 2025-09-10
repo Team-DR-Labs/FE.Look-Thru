@@ -7,7 +7,7 @@ export default function DoneLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <div>
+        <div className="h-dvh">
             <Toaster />
             {children}
         </div>
