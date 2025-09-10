@@ -12,9 +12,9 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
-    title: "Look-Thru",
+    title: "LookThru",
     description:
-        "Look-Thru는 당신의 옷으로 새로운 스타일을 찾아주는 AI 스타일리스트입니다.",
+        "LookThru는 AI기반 가상 피팅 서비스입니다. 어울릴지 고민헀던 옷을 직접 가상으로 입어보고 눈으로 확인해보세요.",
 };
 
 export default function RootLayout({
