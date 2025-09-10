@@ -89,7 +89,7 @@ export default function ProcessingPage() {
                 </div>
 
                 {/* Loading Section */}
-                <div className="self-stretch px-4 pt-4 pb-6 rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
+                <div className="self-stretch px-4 pt-4 pb-6 mb-10 rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
                     <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
                         <div className="self-stretch px-0.5 inline-flex justify-between items-start">
                             <div className="text-center justify-start text-stone-900/80 text-sm font-medium font-['Pretendard'] leading-tight">
