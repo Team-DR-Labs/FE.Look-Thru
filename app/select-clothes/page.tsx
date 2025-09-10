@@ -221,7 +221,7 @@ export default function SelectClothes() {
                             {!isFull && (
                                 <button
                                     onClick={handleAddClick}
-                                    className="pl-4 pr-5 py-2.5 bg-white/70 rounded-[100px] outline outline-2 outline-offset-[-2px] outline-white inline-flex justify-center items-center gap-1.5 hover:bg-white/80 transition-colors"
+                                    className="pl-4 pr-5 py-2.5 bg-white/70 rounded-[100px] outline-2 outline-offset-[-2px] outline-white inline-flex justify-center items-center gap-1.5 hover:bg-white/80 transition-colors"
                                 >
                                     <svg
                                         width="21"
@@ -291,7 +291,7 @@ export default function SelectClothes() {
                         // 초기 업로드 화면
                         <div
                             onClick={() => setShowPopup(true)}
-                            className="w-96 py-6 bg-white/50 rounded-2xl outline outline-4 outline-offset-[-4px] outline-white inline-flex flex-col justify-center items-center gap-4 overflow-hidden cursor-pointer"
+                            className="w-96 py-6 bg-white/50 rounded-2xl outline-4 outline-offset-[-4px] outline-white inline-flex flex-col justify-center items-center gap-4 overflow-hidden cursor-pointer"
                         >
                             <svg
                                 width="49"

@@ -29,11 +29,11 @@ export default function Home() {
                 ></div>
             </div>
             <div className="w-full h-full md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col justify-between">
-                {/* Header and Main text */}
-                <div className="pt-32">
+                {/* Header, text and image */}
+                <div className="flex flex-col items-center pt-16 text-center">
                     <div className="self-stretch py-4 flex flex-col justify-center items-center gap-1 overflow-hidden">
                         <div className="inline-flex justify-center items-center gap-1">
-                            <div className="opacity-70 text-center justify-start text-pink-600 text-base font-medium leading-snug">
+                            <div className="opacity-70 text-pink-600 text-base font-medium leading-snug">
                                 시작하기
                             </div>
                             <svg
@@ -68,20 +68,26 @@ export default function Home() {
                                 </g>
                             </svg>
                         </div>
-                        <div className="text-center justify-start text-stone-900 text-2xl font-semibold leading-9">
+                        <div className="text-stone-900 text-2xl font-semibold leading-9">
                             망설임은 이제 그만,
                             <br />
                             직접 눈으로 확인해보세요
                         </div>
                     </div>
-                </div>
-
-                {/* Background Image - Add your image here */}
-                <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
-                    <picture>
-                        <source srcSet="https://fonts.gstatic.com/s/e/notoemoji/latest/1f52e/512.webp" type="image/webp" />
-                        <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f52e/512.gif" alt="🔮" width="256" height="256" />
-                    </picture>
+                    <div className="py-8">
+                        <picture>
+                            <source
+                                srcSet="https://fonts.gstatic.com/s/e/notoemoji/latest/1f52e/512.webp"
+                                type="image/webp"
+                            />
+                            <img
+                                src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f52e/512.gif"
+                                alt="🔮"
+                                width="256"
+                                height="256"
+                            />
+                        </picture>
+                    </div>
                 </div>
 
                 {/* Bottom Navigation */}
