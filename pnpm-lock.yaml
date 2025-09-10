@@ -14,6 +14,9 @@ importers:
       file-saver:
         specifier: ^2.0.5
         version: 2.0.5
+      mixpanel-browser:
+        specifier: ^2.70.0
+        version: 2.70.0
       next:
         specifier: 15.5.2
         version: 15.5.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -279,6 +282,21 @@ packages:
   '@jridgewell/trace-mapping@0.3.30':
     resolution: {integrity: sha512-GQ7Nw5G2lTu/BtHTKfXhKHok2WGetd4XYcVKGx00SjAk8GMwgJM3zr6zORiPGuOE+/vkc90KtTosSSvaCjKb2Q==}
 
+  '@mixpanel/rrdom@2.0.0-alpha.18.1':
+    resolution: {integrity: sha512-bkltbuuYuXuzGoBaDHQOotUn1Z3+kXg98uBjjoq+YLUh3REv0ok1q/B912ZyzBEcU856zM3iLYrFVt3sl9/ZYA==}
+
+  '@mixpanel/rrweb-snapshot@2.0.0-alpha.18.1':
+    resolution: {integrity: sha512-PKwu7NQwogHcJrWS7FSOIfo+d8QVjI1H67Xoe7q0CR9a0xpKsxrR/AhJRm4uUMI5cN4f7eH0mxyXuPj4X7rLtg==}
+
+  '@mixpanel/rrweb-types@2.0.0-alpha.18.1':
+    resolution: {integrity: sha512-0gVDvG551iDTV+ffn2KzPfEc1r2YD0y1Zwm+p1NzXMw55/dnu+ZXJ1yVF5ciI6ebYk0udKV9PAZlIye3M5yENA==}
+
+  '@mixpanel/rrweb-utils@2.0.0-alpha.18.1':
+    resolution: {integrity: sha512-RP9y05dt08HT2kcDZWQebU76LclCLivGvRqv6530w6e13UdfhPM+/Qxg9X49LuzJyuCCk+9FAu5IL4doph7nsQ==}
+
+  '@mixpanel/rrweb@2.0.0-alpha.18.1':
+    resolution: {integrity: sha512-LH2wmwLPSAtq7j3iqxm32cFwDCp0xqLiXKDJq1B7WWGowNfrGOfVjqZ4ftf5dXMm0w2UNpx8tWfi+9Tt4YMt0g==}
+
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
 
@@ -451,6 +469,9 @@ packages:
 
   '@tybys/wasm-util@0.10.0':
     resolution: {integrity: sha512-VyyPYFlOMNylG45GoAe0xDoLwWuowvf92F9kySqzYh8vmYm7D2u4iUJKa1tOUpS70Ku13ASrOkS4ScXFsTaCNQ==}
+
+  '@types/css-font-loading-module@0.0.7':
+    resolution: {integrity: sha512-nl09VhutdjINdWyXxHWN/w9zlNCfr60JUqJbd24YXUuCwgeL0TpFSdElCwb6cxfB6ybE19Gjj4g0jsgkXxKv1Q==}
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
@@ -629,6 +650,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@xstate/fsm@1.6.5':
+    resolution: {integrity: sha512-b5o1I6aLNeYlU/3CPlj/Z91ybk1gUsKT+5NAJI+2W4UjvS5KLG28K9v5UvNoFVjHV8PajVZ00RH3vnjyQO7ZAw==}
+
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
@@ -706,6 +730,10 @@ packages:
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
+
+  base64-arraybuffer@1.0.2:
+    resolution: {integrity: sha512-I3yl4r9QB5ZRY3XuJVEPfc2XhZO6YweFPI+UovAzn+8/hb3oJ6lnysaFcjVpkCPfVWFUDvoZ8kmVDP7WyRtYtQ==}
+    engines: {node: '>= 0.6.0'}
 
   brace-expansion@1.1.12:
     resolution: {integrity: sha512-9T9UjW3r0UW5c1Q7GTwllptXwhvYmEzFhzMfZ9H7FQWt+uZePjZPjBP/W1ZEyZ1twGWom5/56TF4lPcqjnDHcg==}
@@ -1409,6 +1437,12 @@ packages:
     resolution: {integrity: sha512-oG62iEk+CYt5Xj2YqI5Xi9xWUeZhDI8jjQmC5oThVH5JGCTgIjr7ciJDzC7MBzYd//WvR1OTmP5Q38Q8ShQtVA==}
     engines: {node: '>= 18'}
 
+  mitt@3.0.1:
+    resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
+
+  mixpanel-browser@2.70.0:
+    resolution: {integrity: sha512-iXSD6t9iNTHd1cHbBlP4LrJACgAKfFrssttGKAy4sNu+BodVccTlJQJeBxINZUBsP/WbWMFSuDo2xHRUr3OG/A==}
+
   mkdirp@3.0.1:
     resolution: {integrity: sha512-+NsyUUAZDmo6YVHzL/stxSu3t9YS1iljliy3BSDrXJ/dkn1KYdmtZODGGjLcc9XLgVVpH4KshHB8XmZgMhaBXg==}
     engines: {node: '>=10'}
@@ -2037,6 +2071,29 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
+  '@mixpanel/rrdom@2.0.0-alpha.18.1':
+    dependencies:
+      '@mixpanel/rrweb-snapshot': 2.0.0-alpha.18.1
+
+  '@mixpanel/rrweb-snapshot@2.0.0-alpha.18.1':
+    dependencies:
+      postcss: 8.5.6
+
+  '@mixpanel/rrweb-types@2.0.0-alpha.18.1': {}
+
+  '@mixpanel/rrweb-utils@2.0.0-alpha.18.1': {}
+
+  '@mixpanel/rrweb@2.0.0-alpha.18.1':
+    dependencies:
+      '@mixpanel/rrdom': 2.0.0-alpha.18.1
+      '@mixpanel/rrweb-snapshot': 2.0.0-alpha.18.1
+      '@mixpanel/rrweb-types': 2.0.0-alpha.18.1
+      '@mixpanel/rrweb-utils': 2.0.0-alpha.18.1
+      '@types/css-font-loading-module': 0.0.7
+      '@xstate/fsm': 1.6.5
+      base64-arraybuffer: 1.0.2
+      mitt: 3.0.1
+
   '@napi-rs/wasm-runtime@0.2.12':
     dependencies:
       '@emnapi/core': 1.5.0
@@ -2172,6 +2229,8 @@ snapshots:
     dependencies:
       tslib: 2.8.1
     optional: true
+
+  '@types/css-font-loading-module@0.0.7': {}
 
   '@types/estree@1.0.8': {}
 
@@ -2345,6 +2404,8 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.11.1':
     optional: true
 
+  '@xstate/fsm@1.6.5': {}
+
   acorn-jsx@5.3.2(acorn@8.15.0):
     dependencies:
       acorn: 8.15.0
@@ -2446,6 +2507,8 @@ snapshots:
   axobject-query@4.1.0: {}
 
   balanced-match@1.0.2: {}
+
+  base64-arraybuffer@1.0.2: {}
 
   brace-expansion@1.1.12:
     dependencies:
@@ -3290,6 +3353,12 @@ snapshots:
   minizlib@3.0.2:
     dependencies:
       minipass: 7.1.2
+
+  mitt@3.0.1: {}
+
+  mixpanel-browser@2.70.0:
+    dependencies:
+      '@mixpanel/rrweb': 2.0.0-alpha.18.1
 
   mkdirp@3.0.1: {}
 

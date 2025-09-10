@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { useClothesStore } from "../../stores/clothesStore";
 import { useRouter } from "next/navigation";
+import { Mixpanel } from "@/lib/mixpanel";
 
 export default function ConfirmPage() {
     const {
@@ -24,6 +25,10 @@ export default function ConfirmPage() {
 
     const handleTryOnClick = async () => {
         if (personImage && (topImage || bottomImage)) {
+            Mixpanel.track("Try On Clicked", {
+                topImage: !!topImage,
+                bottomImage: !!bottomImage,
+            });
             setIsLoading(true);
             setError(null);
             router.push("/processing");

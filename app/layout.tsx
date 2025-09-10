@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import MixpanelProvider from "@/components/MixpanelProvider";
 
 const pretendard = localFont({
     src: "../public/fonts/Pretendard-Regular.woff2",
@@ -23,9 +24,11 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ko" className={`${pretendard.variable}`}>
-            <body className="h-dvh">
-                <Toaster />
-                {children}
+            <body>
+                <MixpanelProvider>
+                    <Toaster />
+                    {children}
+                </MixpanelProvider>
             </body>
         </html>
     );

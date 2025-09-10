@@ -5,6 +5,7 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import { useClothesStore } from "../../stores/clothesStore";
 import { useRouter } from "next/navigation";
+import { Mixpanel } from "@/lib/mixpanel";
 
 export default function SelectClothes() {
     const {
@@ -31,8 +32,10 @@ export default function SelectClothes() {
                 const imageUrl = e.target?.result as string;
                 if (currentUploadType === "상의") {
                     setTopImage(imageUrl);
+                    Mixpanel.track("상의선택");
                 } else if (currentUploadType === "하의") {
                     setBottomImage(imageUrl);
+                    Mixpanel.track("하의선택");
                 }
                 setCurrentUploadType(null); // Reset after upload
             };
@@ -56,8 +59,10 @@ export default function SelectClothes() {
     const handleDeleteCloth = (type: "상의" | "하의") => {
         if (type === "상의") {
             deleteTopImage();
+            Mixpanel.track("상의 삭제");
         } else {
             deleteBottomImage();
+            Mixpanel.track("하의 삭제");
         }
     };
 
@@ -375,6 +380,10 @@ export default function SelectClothes() {
                     <button
                         onClick={() => {
                             if (uploadedClothes.length > 0) {
+                                Mixpanel.track("다음 클릭", {
+                                    topImage: !!topImage,
+                                    bottomImage: !!bottomImage,
+                                });
                                 router.push("/select-photo");
                             }
                         }}
