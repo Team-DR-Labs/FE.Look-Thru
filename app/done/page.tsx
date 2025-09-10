@@ -31,6 +31,10 @@ export default function DonePage() {
         return null; // 리디렉션 중 렌더링 방지
     }
 
+    const handleMainPage = () => {
+        router.push("/");
+    };
+
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-0 md:p-8">
             <div className="w-full h-screen md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col justify-between">
@@ -91,14 +95,20 @@ export default function DonePage() {
                 </div>
 
                 {/* Bottom Navigation */}
-                <div className="w-full p-4 bg-white rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
+                <div className="w-full p-4 bg-white rounded-t-3xl inline-flex justify-start items-start gap-1">
                     <button
                         onClick={handleSaveImage}
-                        className="flex-1 h-16 py-4 bg-pink-600 rounded-tl-xl rounded-tr-[100px] rounded-bl-xl rounded-br-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
+                        className="flex-1 h-16 py-4 bg-pink-600 rounded-full inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
                     >
                         <div className="justify-start text-white text-base font-semibold font-['Pretendard'] leading-snug">
                             저장하기
                         </div>
+                    </button>
+                    <button
+                        onClick={handleMainPage}
+                        className="flex-1 h-16 py-4 bg-pink-600 rounded-full inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
+                    >
+                        메인페이지로 가기
                     </button>
                 </div>
             </div>
