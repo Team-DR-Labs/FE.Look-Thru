@@ -6,7 +6,14 @@ import { useClothesStore } from "../../stores/clothesStore";
 import { useRouter } from "next/navigation";
 
 export default function ConfirmPage() {
-    const { personImage, topImage, bottomImage } = useClothesStore();
+    const {
+        personImage,
+        topImage,
+        bottomImage,
+        setResultImage,
+        setIsLoading,
+        setError,
+    } = useClothesStore();
     const router = useRouter();
 
     useEffect(() => {
@@ -14,6 +21,44 @@ export default function ConfirmPage() {
             router.replace("/select-clothes");
         }
     }, [personImage, topImage, bottomImage, router]);
+
+    const handleTryOnClick = async () => {
+        if (personImage && (topImage || bottomImage)) {
+            setIsLoading(true);
+            setError(null);
+            router.push("/processing");
+
+            try {
+                const response = await fetch("/api/combine-images", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        personImage,
+                        topImage,
+                        bottomImage,
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to combine images");
+                }
+
+                const data = await response.json();
+                setResultImage(data.result);
+            } catch (error) {
+                console.error(error);
+                setError(
+                    error instanceof Error
+                        ? error.message
+                        : "An unknown error occurred",
+                );
+            } finally {
+                setIsLoading(false);
+            }
+        }
+    };
 
     if (!personImage || (!topImage && !bottomImage)) {
         return null; // 리디렉션 중 렌더링 방지
@@ -168,7 +213,7 @@ export default function ConfirmPage() {
                         </svg>
                     </div>
                     <div
-                        onClick={() => router.push("/processing")}
+                        onClick={handleTryOnClick}
                         className="flex-1 h-16 py-4 bg-pink-600 rounded-tl-xl rounded-tr-[100px] rounded-bl-xl rounded-br-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden cursor-pointer"
                     >
                         <div className="justify-start text-white text-base font-semibold font-['Pretendard'] leading-snug">

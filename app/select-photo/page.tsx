@@ -11,9 +11,6 @@ export default function SelectPhoto() {
         setPersonImage,
         topImage,
         bottomImage,
-        setResultImage,
-        setIsLoading,
-        setError,
     } = useClothesStore();
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -35,39 +32,9 @@ export default function SelectPhoto() {
         }
     };
 
-    const handleNextClick = async () => {
+    const handleNextClick = () => {
         if (personImage && (topImage || bottomImage)) {
-            setIsLoading(true);
-            setError(null);
-            router.push("/processing");
-
-            try {
-                const response = await fetch("/api/combine-images", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        personImage,
-                        topImage,
-                        bottomImage,
-                    }),
-                });
-
-                if (!response.ok) {
-                    throw new Error("Failed to combine images");
-                }
-
-                const data = await response.json();
-                setResultImage(data.result);
-            } catch (error) {
-                console.error(error);
-                setError(
-                    error instanceof Error ? error.message : "An unknown error occurred",
-                );
-            } finally {
-                setIsLoading(false);
-            }
+            router.push("/confirm");
         }
     };
 
