@@ -105,7 +105,7 @@ export default function Home() {
                             href="https://lookthru.hashnode.space/default-guide/6rcc7j247kcv67o07lky66as67cp7lmo"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 text-sm font-medium leading-tight hover:underline mb-5"
+                            className="text-blue-600 text-sm font-medium leading-tight hover:underline"
                         >
                             개인정보보호정책 →
                         </a>
