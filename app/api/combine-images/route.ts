@@ -65,15 +65,15 @@ export async function POST(req: NextRequest) {
             imageParts.push(base64ToGenerativePart(topImage, "image/png"));
             imageParts.push(base64ToGenerativePart(bottomImage, "image/png"));
             promptText =
-                "Using the first image as the base, replace the person's clothing with the top from the second image and the bottoms from the third image. Make the result's background transparent.";
+                "첫번째 사진의 옷을 뒤에 있는 옷들로 바꿀꺼야. top과 bottom에서 옷들만 추출해서 배경을 투명하게 한 다음에 person의 사진을 아무것도 건들지말고, top은 상의 bottom은 하의로 옷을 교체해줘 person은 배경, 얼굴 등등 모든 구성 요소가 그대로 있고, 옷만 바껴야해 반드시 옷만 바꿔줘";
         } else if (topImage) {
             imageParts.push(base64ToGenerativePart(topImage, "image/png"));
             promptText =
-                "Using the first image as the base, replace the person's clothing with the top from the second image. Make the result's background transparent.";
+                "첫번째 사진의 옷을 뒤에 있는 옷들로 바꿀꺼야. top에서 상의만 추출해서 배경을 투명하게 한 다음에 person의 사진을 아무것도 건들지말고, 상의를 교체해줘 person은 배경, 얼굴 등등 모든 구성 요소가 그대로 있고, 옷만 바껴야해 반드시 옷만 바꿔줘";
         } else if (bottomImage) {
             imageParts.push(base64ToGenerativePart(bottomImage, "image/png"));
             promptText =
-                "Using the first image as the base, replace the person's clothing with the bottoms from the second image. Make the result's background transparent.";
+                "첫번째 사진의 옷을 뒤에 있는 옷들로 바꿀꺼야. bottom에서 하의만 추출해서 배경을 투명하게 한 다음에 person의 사진을 아무것도 건들지말고, 하의를 교체해줘 person은 배경, 얼굴 등등 모든 구성 요소가 그대로 있고, 옷만 바껴야해 반드시 옷만 바꿔줘";
         }
 
         const allParts = [{ text: promptText }, ...imageParts];
