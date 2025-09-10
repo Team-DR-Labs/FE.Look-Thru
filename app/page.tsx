@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useClothesStore } from "../stores/clothesStore";
 import { useEffect } from "react";
 import Image from "next/image";
+import { Mixpanel } from "@/lib/mixpanel";
 
 export default function Home() {
     const router = useRouter();
@@ -14,7 +15,7 @@ export default function Home() {
     }, [clearAllImages]);
 
     const handleStartClick = () => {
-        console.log("handleStartClick");
+        Mixpanel.track("시작");
         router.push("/select-clothes");
     };
 

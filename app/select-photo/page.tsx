@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { useClothesStore } from "../../stores/clothesStore";
 import { useRouter } from "next/navigation";
+import { Mixpanel } from "@/lib/mixpanel";
 
 export default function SelectPhoto() {
     const {
@@ -27,6 +28,7 @@ export default function SelectPhoto() {
             const reader = new FileReader();
             reader.onload = (e) => {
                 setPersonImage(e.target?.result as string);
+                Mixpanel.track("내 사진 업로드");
             };
             reader.readAsDataURL(file);
         }
@@ -34,6 +36,7 @@ export default function SelectPhoto() {
 
     const handleNextClick = () => {
         if (personImage && (topImage || bottomImage)) {
+            Mixpanel.track("다음 클릭");
             router.push("/confirm");
         }
     };

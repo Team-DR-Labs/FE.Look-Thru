@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useClothesStore } from "../../stores/clothesStore";
 import Image from "next/image";
+import { Mixpanel } from "@/lib/mixpanel";
 
 export default function ProcessingPage() {
     const router = useRouter();
@@ -13,14 +14,18 @@ export default function ProcessingPage() {
     useEffect(() => {
         if (!personImage || (!topImage && !bottomImage)) {
             router.replace("/select-clothes");
+        } else {
+            Mixpanel.track("Processing Started");
         }
     }, [personImage, topImage, bottomImage, router]);
 
     useEffect(() => {
         if (!isLoading) {
             if (resultImage) {
+                Mixpanel.track("Processing Succeeded");
                 router.push("/done");
             } else if (error) {
+                Mixpanel.track("Processing Failed", { error });
                 // You might want to show the error to the user before redirecting
                 alert(`An error occurred: ${error}`);
                 router.back();

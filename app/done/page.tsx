@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useClothesStore } from "../../stores/clothesStore";
 import { useRouter } from "next/navigation";
 import { saveAs } from "file-saver";
+import { Mixpanel } from "@/lib/mixpanel";
 
 export default function DonePage() {
     const { resultImage, clearAllImages } = useClothesStore();
@@ -13,17 +14,21 @@ export default function DonePage() {
     useEffect(() => {
         if (!resultImage) {
             router.replace("/select-clothes");
+        } else {
+            Mixpanel.track("Reached Done Page");
         }
     }, [resultImage, router]);
 
     const handleSaveImage = () => {
         if (resultImage) {
+            Mixpanel.track("Image Saved");
             saveAs(resultImage, "look-thru-result.png");
         }
     };
 
     const handleRestart = () => {
         clearAllImages();
+        Mixpanel.track("Restarted");
         router.push("/select-clothes");
     };
 
@@ -32,6 +37,7 @@ export default function DonePage() {
     }
 
     const handleMainPage = () => {
+        Mixpanel.track("Returned to Main Page");
         router.push("/");
     };
 
