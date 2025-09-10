@@ -5,23 +5,29 @@ import Image from "next/image";
 import { useClothesStore } from "../../stores/clothesStore";
 import { useRouter } from "next/navigation";
 import { saveAs } from "file-saver";
-import DoneImage from "../../asset/done.png";
 
 export default function DonePage() {
-    const { personImage, topImage, bottomImage } = useClothesStore();
+    const { resultImage, clearAllImages } = useClothesStore();
     const router = useRouter();
 
     useEffect(() => {
-        if (!personImage || (!topImage && !bottomImage)) {
+        if (!resultImage) {
             router.replace("/select-clothes");
         }
-    }, [personImage, topImage, bottomImage, router]);
+    }, [resultImage, router]);
 
     const handleSaveImage = () => {
-        saveAs(DoneImage.src, "look-thru-result.png");
+        if (resultImage) {
+            saveAs(resultImage, "look-thru-result.png");
+        }
     };
 
-    if (!personImage || (!topImage && !bottomImage)) {
+    const handleRestart = () => {
+        clearAllImages();
+        router.push("/select-clothes");
+    };
+
+    if (!resultImage) {
         return null; // 리디렉션 중 렌더링 방지
     }
 
@@ -76,8 +82,10 @@ export default function DonePage() {
                     <div className="self-stretch flex-1 px-5 mt-8 flex justify-center items-start gap-2.5 overflow-hidden">
                         <Image
                             className="w-96 h-[484px] rounded-2xl object-cover"
-                            src={DoneImage}
+                            src={resultImage}
                             alt="Done"
+                            width={384}
+                            height={484}
                         />
                     </div>
                 </div>
@@ -85,8 +93,38 @@ export default function DonePage() {
                 {/* Bottom Navigation */}
                 <div className="w-full p-4 bg-white rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
                     <button
+                        onClick={handleRestart}
+                        className="w-16 self-stretch bg-zinc-100 rounded-tl-[100px] rounded-tr-xl rounded-bl-[100px] rounded-br-xl flex justify-center items-center gap-2.5 cursor-pointer"
+                    >
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <mask
+                                id="mask0_123_456"
+                                style={{ maskType: "alpha" }}
+                                maskUnits="userSpaceOnUse"
+                                x="0"
+                                y="0"
+                                width="24"
+                                height="24"
+                            >
+                                <rect width="24" height="24" fill="#D9D9D9" />
+                            </mask>
+                            <g mask="url(#mask0_123_456)">
+                                <path
+                                    d="M12 20C13.1 20 14.125 19.7875 15.075 19.3625C16.025 18.9375 16.85 18.375 17.55 17.675C18.25 16.975 18.8125 16.15 19.2375 15.2C19.6625 14.25 19.875 13.225 19.875 12.125C19.875 11.025 19.6625 10 19.2375 9.05C18.8125 8.1 18.25 7.275 17.55 6.575C16.85 5.875 16.025 5.3125 15.075 4.8875C14.125 4.4625 13.1 4.25 12 4.25C10.15 4.25 8.5125 4.8625 7.0875 6.0875C5.6625 7.3125 4.875 8.925 4.725 10.925H6.5C6.65 9.5 7.225 8.3625 8.35 7.5125C9.475 6.6625 10.7 6.25 12 6.25C13.65 6.25 15.0375 6.825 16.1625 7.975C17.2875 9.125 17.85 10.525 17.875 12.175C17.875 12.725 17.7875 13.2625 17.6125 13.7875C17.4375 14.3125 17.2 14.7875 16.9 15.2125L15.5 13.8125H19V12.3125H12.925V18.3875H14.425V15.6875L15.9 17.1625C15.35 17.7125 14.725 18.1375 14.025 18.4375C13.325 18.7375 12.65 18.875 12 18.875C10.325 18.875 8.9 18.3 7.725 17.15C6.55 16 5.975 14.575 6 12.875H4C3.95 15.2 4.675 17.1875 6.175 18.8375C7.675 20.4875 9.625 21.25 12 21.25V20Z"
+                                    fill="#1C1B1F"
+                                />
+                            </g>
+                        </svg>
+                    </button>
+                    <button
                         onClick={handleSaveImage}
-                        className="flex-1 h-16 py-4 bg-pink-600 rounded-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
+                        className="flex-1 h-16 py-4 bg-pink-600 rounded-tl-xl rounded-tr-[100px] rounded-bl-xl rounded-br-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
                     >
                         <div className="justify-start text-white text-base font-semibold font-['Pretendard'] leading-snug">
                             저장하기

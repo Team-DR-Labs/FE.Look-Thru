@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useClothesStore } from "../../stores/clothesStore";
 import Image from "next/image";
 
 export default function ProcessingPage() {
-    const [progress, setProgress] = useState(0);
     const router = useRouter();
-    const { personImage, topImage, bottomImage } = useClothesStore();
+    const { personImage, topImage, bottomImage, isLoading, resultImage, error } =
+        useClothesStore();
 
     useEffect(() => {
         if (!personImage || (!topImage && !bottomImage)) {
@@ -17,21 +17,16 @@ export default function ProcessingPage() {
     }, [personImage, topImage, bottomImage, router]);
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setProgress((prevProgress) => {
-                if (prevProgress >= 100) {
-                    clearInterval(timer);
-                    router.push("/done"); // TODO: 결과 페이지로 이동
-                    return 100;
-                }
-                return prevProgress + 1;
-            });
-        }, 100); // 100ms마다 1%씩 증가하여 10초 완성
-
-        return () => {
-            clearInterval(timer);
-        };
-    }, [router]);
+        if (!isLoading) {
+            if (resultImage) {
+                router.push("/done");
+            } else if (error) {
+                // You might want to show the error to the user before redirecting
+                alert(`An error occurred: ${error}`);
+                router.back();
+            }
+        }
+    }, [isLoading, resultImage, error, router]);
 
     if (!personImage || (!topImage && !bottomImage)) {
         return null; // 리디렉션 중 렌더링 방지
@@ -93,22 +88,18 @@ export default function ProcessingPage() {
                     />
                 </div>
 
-                {/* Progress Bar Section */}
+                {/* Loading Section */}
                 <div className="self-stretch px-4 pt-4 pb-6 rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
                     <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
                         <div className="self-stretch px-0.5 inline-flex justify-between items-start">
                             <div className="text-center justify-start text-stone-900/80 text-sm font-medium font-['Pretendard'] leading-tight">
-                                현재 진행 중...
-                            </div>
-                            <div className="text-center justify-start text-stone-900/80 text-sm font-medium font-['Pretendard'] leading-tight">
-                                {progress}%
+                                {error ? "오류 발생" : "현재 진행 중..."}
                             </div>
                         </div>
                         <div className="self-stretch h-2 bg-white/40 rounded-[100px] flex flex-col justify-center items-start gap-2.5 overflow-hidden">
-                            <div
-                                className="h-full bg-pink-600 rounded-2xl transition-all duration-100 ease-linear"
-                                style={{ width: `${progress}%` }}
-                            />
+                            {!error && (
+                                <div className="h-full bg-pink-600 rounded-2xl animate-pulse w-full" />
+                            )}
                         </div>
                     </div>
                 </div>

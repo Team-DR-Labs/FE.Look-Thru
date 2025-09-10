@@ -6,8 +6,15 @@ import { useClothesStore } from "../../stores/clothesStore";
 import { useRouter } from "next/navigation";
 
 export default function SelectPhoto() {
-    const { personImage, setPersonImage, topImage, bottomImage } =
-        useClothesStore();
+    const {
+        personImage,
+        setPersonImage,
+        topImage,
+        bottomImage,
+        setResultImage,
+        setIsLoading,
+        setError,
+    } = useClothesStore();
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -28,10 +35,39 @@ export default function SelectPhoto() {
         }
     };
 
-    const handleNextClick = () => {
-        if (personImage) {
-            // 다음 페이지로 이동하는 로직 (예: 결과 페이지)
-            router.push("/confirm");
+    const handleNextClick = async () => {
+        if (personImage && (topImage || bottomImage)) {
+            setIsLoading(true);
+            setError(null);
+            router.push("/processing");
+
+            try {
+                const response = await fetch("/api/combine-images", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        personImage,
+                        topImage,
+                        bottomImage,
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to combine images");
+                }
+
+                const data = await response.json();
+                setResultImage(data.result);
+            } catch (error) {
+                console.error(error);
+                setError(
+                    error instanceof Error ? error.message : "An unknown error occurred",
+                );
+            } finally {
+                setIsLoading(false);
+            }
         }
     };
 
