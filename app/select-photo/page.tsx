@@ -11,9 +11,6 @@ export default function SelectPhoto() {
         setPersonImage,
         topImage,
         bottomImage,
-        setResultImage,
-        setIsLoading,
-        setError,
     } = useClothesStore();
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -35,39 +32,9 @@ export default function SelectPhoto() {
         }
     };
 
-    const handleNextClick = async () => {
+    const handleNextClick = () => {
         if (personImage && (topImage || bottomImage)) {
-            setIsLoading(true);
-            setError(null);
-            router.push("/processing");
-
-            try {
-                const response = await fetch("/api/combine-images", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        personImage,
-                        topImage,
-                        bottomImage,
-                    }),
-                });
-
-                if (!response.ok) {
-                    throw new Error("Failed to combine images");
-                }
-
-                const data = await response.json();
-                setResultImage(data.result);
-            } catch (error) {
-                console.error(error);
-                setError(
-                    error instanceof Error ? error.message : "An unknown error occurred",
-                );
-            } finally {
-                setIsLoading(false);
-            }
+            router.push("/confirm");
         }
     };
 
@@ -76,7 +43,7 @@ export default function SelectPhoto() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-0 md:p-8">
+        <div className="h-full bg-gray-100 flex items-center justify-center p-0 md:p-8">
             <div className="hidden md:block absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200">
                 <div
                     className="absolute inset-0 opacity-50"
@@ -86,7 +53,7 @@ export default function SelectPhoto() {
                 ></div>
             </div>
 
-            <div className="w-full h-screen md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
+            <div className="w-full h-full md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
                 {/* Back Button */}
                 <div className="px-4 py-4 pt-8 md:pt-4">
                     <button onClick={() => router.back()} className="p-2">
@@ -170,7 +137,7 @@ export default function SelectPhoto() {
                             </div>
                             <button
                                 onClick={() => fileInputRef.current?.click()}
-                                className="pl-6 pr-7 py-3 bg-white/50 rounded-[100px] outline outline-2 outline-offset-[-2px] outline-white inline-flex justify-center items-center gap-2 overflow-hidden"
+                                className="pl-6 pr-7 py-3 bg-white/50 rounded-[100px] outline-2 outline-offset-[-2px] outline-white inline-flex justify-center items-center gap-2 overflow-hidden"
                             >
                                 <svg
                                     width="21"
@@ -199,7 +166,7 @@ export default function SelectPhoto() {
                                         <path
                                             d="M4.92308 17.0833C4.50211 17.0833 4.14579 16.9375 3.85413 16.6458C3.56246 16.3541 3.41663 15.9978 3.41663 15.5769V4.4231C3.41663 4.00213 3.56246 3.64581 3.85413 3.35415C4.14579 3.06248 4.50211 2.91665 4.92308 2.91665H11.3975V4.16665H4.92308C4.85892 4.16665 4.80017 4.19338 4.74683 4.24685C4.69336 4.30019 4.66663 4.35894 4.66663 4.4231V15.5769C4.66663 15.641 4.69336 15.6998 4.74683 15.7531C4.80017 15.8066 4.85892 15.8333 4.92308 15.8333H16.0768C16.141 15.8333 16.1998 15.8066 16.2531 15.7531C16.3066 15.6998 16.3333 15.641 16.3333 15.5769V9.97602H17.5833V15.5769C17.5833 15.9978 17.4375 16.3541 17.1458 16.6458C16.8541 16.9375 16.4978 17.0833 16.0768 17.0833H4.92308ZM6.12496 13.9583H14.9389L12.1987 10.3046L9.85892 13.3494L8.19225 11.2179L6.12496 13.9583ZM15.5881 8.24519V4.47748L14.0464 5.9904L13.1762 5.12019L16.2131 2.08331L19.25 5.12019L18.3798 5.9904L16.8381 4.47748V8.24519H15.5881Z"
                                             fill="#1D1D1D"
-                                            fill-opacity="0.5"
+                                            fillOpacity="0.5"
                                         />
                                     </g>
                                 </svg>
@@ -211,7 +178,7 @@ export default function SelectPhoto() {
                     ) : (
                         <div
                             onClick={() => fileInputRef.current?.click()}
-                            className="w-full h-96 bg-white/50 rounded-2xl outline outline-4 outline-offset-[-4px] outline-white flex flex-col justify-center items-center gap-2 overflow-hidden cursor-pointer"
+                            className="w-full h-96 bg-white/50 rounded-2xl outline-4 outline-offset-[-4px] outline-white flex flex-col justify-center items-center gap-2 overflow-hidden cursor-pointer"
                         >
                             <svg
                                 width="65"

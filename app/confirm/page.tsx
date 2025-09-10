@@ -6,7 +6,14 @@ import { useClothesStore } from "../../stores/clothesStore";
 import { useRouter } from "next/navigation";
 
 export default function ConfirmPage() {
-    const { personImage, topImage, bottomImage } = useClothesStore();
+    const {
+        personImage,
+        topImage,
+        bottomImage,
+        setResultImage,
+        setIsLoading,
+        setError,
+    } = useClothesStore();
     const router = useRouter();
 
     useEffect(() => {
@@ -15,12 +22,50 @@ export default function ConfirmPage() {
         }
     }, [personImage, topImage, bottomImage, router]);
 
+    const handleTryOnClick = async () => {
+        if (personImage && (topImage || bottomImage)) {
+            setIsLoading(true);
+            setError(null);
+            router.push("/processing");
+
+            try {
+                const response = await fetch("/api/combine-images", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        personImage,
+                        topImage,
+                        bottomImage,
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to combine images");
+                }
+
+                const data = await response.json();
+                setResultImage(data.result);
+            } catch (error) {
+                console.error(error);
+                setError(
+                    error instanceof Error
+                        ? error.message
+                        : "An unknown error occurred",
+                );
+            } finally {
+                setIsLoading(false);
+            }
+        }
+    };
+
     if (!personImage || (!topImage && !bottomImage)) {
         return null; // 리디렉션 중 렌더링 방지
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-0 md:p-8">
+        <div className="h-full bg-gray-100 flex items-center justify-center p-0 md:p-8">
             <div className="hidden md:block absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200">
                 <div
                     className="absolute inset-0 opacity-50"
@@ -30,7 +75,7 @@ export default function ConfirmPage() {
                 ></div>
             </div>
 
-            <div className="w-full h-screen md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
+            <div className="w-full h-full md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
                 {/* Back Button */}
                 <div className="px-4 py-4 pt-8 md:pt-4">
                     <button onClick={() => router.back()} className="p-2">
@@ -168,7 +213,7 @@ export default function ConfirmPage() {
                         </svg>
                     </div>
                     <div
-                        onClick={() => router.push("/processing")}
+                        onClick={handleTryOnClick}
                         className="flex-1 h-16 py-4 bg-pink-600 rounded-tl-xl rounded-tr-[100px] rounded-bl-xl rounded-br-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden cursor-pointer"
                     >
                         <div className="justify-start text-white text-base font-semibold font-['Pretendard'] leading-snug">

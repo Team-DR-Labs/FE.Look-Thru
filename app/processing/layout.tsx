@@ -7,7 +7,7 @@ export default function ProcessingLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <div>
+        <div className="h-dvh">
             <Toaster />
             {children}
         </div>

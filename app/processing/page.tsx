@@ -33,8 +33,8 @@ export default function ProcessingPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-0 md:p-8">
-            <div className="w-full h-screen md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
+        <div className="h-full bg-gray-100 flex items-center justify-center p-0 md:p-8">
+            <div className="w-full h-full md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
                 {/* Header */}
                 <div className="self-stretch py-4 mt-16 flex flex-col justify-center items-center gap-1 overflow-hidden">
                     <div className="inline-flex justify-center items-center gap-1">
@@ -89,7 +89,7 @@ export default function ProcessingPage() {
                 </div>
 
                 {/* Loading Section */}
-                <div className="self-stretch px-4 pt-4 pb-6 rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
+                <div className="self-stretch px-4 pt-4 pb-6 mb-10 rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
                     <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
                         <div className="self-stretch px-0.5 inline-flex justify-between items-start">
                             <div className="text-center justify-start text-stone-900/80 text-sm font-medium font-['Pretendard'] leading-tight">

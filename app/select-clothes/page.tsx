@@ -66,8 +66,45 @@ export default function SelectClothes() {
     };
 
     const clothesTypes = [
-        { name: "상의", emoji: "👕", desc: "반팔, 후드티 등..." },
-        { name: "하의", emoji: "👖", desc: "반바지, 긴바지 등..." },
+        { 
+            name: "상의", 
+            emoji: (
+                <svg width="36" height="37" viewBox="0 0 36 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clipPath="url(#clip0_18_792)">
+                        <path d="M28.71 10.4198V4.58601C28.71 4.06851 28.2906 3.64911 27.7731 3.64911H24.4188C23.9013 3.64911 23.4819 4.06851 23.4819 4.58601V5.50671C23.4819 8.50911 21.1689 11.1263 18.1683 11.2172C15.0633 11.3108 12.5172 8.82141 12.5172 5.73711V4.58691C12.5172 4.06941 12.0978 3.65001 11.5803 3.65001H8.22603C7.70853 3.65001 7.28913 4.06941 7.28913 4.58691V10.4207C7.28913 12.3134 6.80943 13.982 6.08043 14.9666C5.15253 16.2203 4.54773 17.681 4.54773 19.2407V31.4771C4.54773 32.5121 5.38653 33.35 6.42063 33.35H29.5767C30.6117 33.35 31.4496 32.5112 31.4496 31.4771V19.2407C31.4496 17.681 30.8448 16.2203 29.9169 14.9666C29.1879 13.9811 28.7082 12.3125 28.7082 10.4207L28.71 10.4198Z" fill="#93C9FF"/>
+                        <path d="M28.71 10.3766V4.58601C28.71 4.06851 28.2906 3.64911 27.7731 3.64911H26.1027C24.3585 19.4216 15.3603 31.4762 4.54858 31.4762C4.54858 32.5103 5.38738 33.3491 6.42148 33.3491H12.5631C20.0907 29.741 26.0811 21.2018 28.71 10.3757V10.3766Z" fill="#4D9DFF"/>
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_18_792">
+                            <rect width="36" height="36" fill="white" transform="translate(0 0.5)"/>
+                        </clipPath>
+                    </defs>
+                </svg>
+            ), 
+            desc: "반팔, 롱슬리브, 맨투맨, 후드티 등..." 
+        },
+        { 
+            name: "하의", 
+            emoji: (
+                <svg width="36" height="37" viewBox="0 0 36 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clipPath="url(#clip0_18_801)">
+                        <path d="M18.468 16.6919L19.8999 34.25H28.7118V3.5033C28.7118 3.0875 28.3743 2.75 27.9585 2.75H8.04236C7.62656 2.75 7.28906 3.0875 7.28906 3.5033V34.25H16.101L17.5329 16.6919H18.468Z" fill="#466CFB"/>
+                        <path d="M7.28912 34.25H16.1001L16.4817 29.5763H7.28912V34.25Z" fill="#7D9DFF"/>
+                        <path d="M28.7109 34.25H19.8999L19.5183 29.5763H28.7109V34.25Z" fill="#7D9DFF"/>
+                        <path d="M8.04236 2.75H27.9576C28.3734 2.75 28.7109 3.0875 28.7109 3.5033V5.9234H7.28906V3.5033C7.28906 3.0875 7.62656 2.75 8.04236 2.75Z" fill="#3E5AF4"/>
+                        <path d="M11.2464 5.92432V7.88542C11.2464 10.0715 9.47431 11.8436 7.28821 11.8436V5.92432H11.2464Z" fill="#5D7EFB"/>
+                        <path d="M24.7536 5.92432V7.88542C24.7536 10.0715 26.5257 11.8436 28.7118 11.8436V5.92432H24.7536Z" fill="#5D7EFB"/>
+                        <path d="M16.4304 5.92432H18.4266V14.9153C17.325 14.9153 16.4304 14.0207 16.4304 12.9191V5.92432Z" fill="#7D9DFF"/>
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_18_801">
+                            <rect width="36" height="36" fill="white" transform="translate(0 0.5)"/>
+                        </clipPath>
+                    </defs>
+                </svg>
+            ), 
+            desc: "반바지, 긴바지, 스커트 등..." 
+        },
     ];
 
     const uploadedClothes = [];
@@ -87,7 +124,7 @@ export default function SelectClothes() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-0 md:p-8">
+        <div className="h-full bg-gray-100 flex items-center justify-center p-0 md:p-8">
             {/* Desktop Frame - 모바일에서는 숨김 */}
             <div className="hidden md:block absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-200">
                 <div
@@ -99,7 +136,7 @@ export default function SelectClothes() {
             </div>
 
             {/* Mobile Container - Responsive Design */}
-            <div className="w-full h-screen md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
+            <div className="w-full h-full md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
                 {/* Back Button */}
                 <div className="px-4 py-4 pt-8 md:pt-4">
                     <button className="p-2">
@@ -184,7 +221,7 @@ export default function SelectClothes() {
                             {!isFull && (
                                 <button
                                     onClick={handleAddClick}
-                                    className="pl-4 pr-5 py-2.5 bg-white/70 rounded-[100px] outline outline-2 outline-offset-[-2px] outline-white inline-flex justify-center items-center gap-1.5 hover:bg-white/80 transition-colors"
+                                    className="pl-4 pr-5 py-2.5 bg-white/70 rounded-[100px] outline-2 outline-offset-[-2px] outline-white inline-flex justify-center items-center gap-1.5 hover:bg-white/80 transition-colors"
                                 >
                                     <svg
                                         width="21"
@@ -254,7 +291,7 @@ export default function SelectClothes() {
                         // 초기 업로드 화면
                         <div
                             onClick={() => setShowPopup(true)}
-                            className="w-96 py-6 bg-white/50 rounded-2xl outline outline-4 outline-offset-[-4px] outline-white inline-flex flex-col justify-center items-center gap-4 overflow-hidden cursor-pointer"
+                            className="w-96 py-6 bg-white/50 rounded-2xl outline-4 outline-offset-[-4px] outline-white inline-flex flex-col justify-center items-center gap-4 overflow-hidden cursor-pointer"
                         >
                             <svg
                                 width="49"
@@ -305,7 +342,10 @@ export default function SelectClothes() {
 
                 {/* Bottom Navigation */}
                 <div className="self-stretch p-4 bg-white rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
-                    <div className="w-16 self-stretch bg-zinc-100 rounded-tl-[100px] rounded-tr-xl rounded-bl-[100px] rounded-br-xl flex justify-center items-center gap-2.5">
+                    <button
+                        onClick={() => router.back()}
+                        className="w-16 self-stretch bg-zinc-100 rounded-tl-[100px] rounded-tr-xl rounded-bl-[100px] rounded-br-xl flex justify-center items-center gap-2.5"
+                        >
                         <svg
                             width="24"
                             height="24"
@@ -331,7 +371,7 @@ export default function SelectClothes() {
                                 />
                             </g>
                         </svg>
-                    </div>
+                    </button>
                     <button
                         onClick={() => {
                             if (uploadedClothes.length > 0) {
