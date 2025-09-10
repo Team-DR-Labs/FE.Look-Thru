@@ -5,23 +5,29 @@ import Image from "next/image";
 import { useClothesStore } from "../../stores/clothesStore";
 import { useRouter } from "next/navigation";
 import { saveAs } from "file-saver";
-import DoneImage from "../../asset/done.png";
 
 export default function DonePage() {
-    const { personImage, topImage, bottomImage } = useClothesStore();
+    const { resultImage, clearAllImages } = useClothesStore();
     const router = useRouter();
 
     useEffect(() => {
-        if (!personImage || (!topImage && !bottomImage)) {
+        if (!resultImage) {
             router.replace("/select-clothes");
         }
-    }, [personImage, topImage, bottomImage, router]);
+    }, [resultImage, router]);
 
     const handleSaveImage = () => {
-        saveAs(DoneImage.src, "look-thru-result.png");
+        if (resultImage) {
+            saveAs(resultImage, "look-thru-result.png");
+        }
     };
 
-    if (!personImage || (!topImage && !bottomImage)) {
+    const handleRestart = () => {
+        clearAllImages();
+        router.push("/select-clothes");
+    };
+
+    if (!resultImage) {
         return null; // 리디렉션 중 렌더링 방지
     }
 
@@ -76,8 +82,10 @@ export default function DonePage() {
                     <div className="self-stretch flex-1 px-5 mt-8 flex justify-center items-start gap-2.5 overflow-hidden">
                         <Image
                             className="w-96 h-[484px] rounded-2xl object-cover"
-                            src={DoneImage}
+                            src={resultImage}
                             alt="Done"
+                            width={384}
+                            height={484}
                         />
                     </div>
                 </div>
@@ -86,7 +94,7 @@ export default function DonePage() {
                 <div className="w-full p-4 bg-white rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
                     <button
                         onClick={handleSaveImage}
-                        className="flex-1 h-16 py-4 bg-pink-600 rounded-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
+                        className="flex-1 h-16 py-4 bg-pink-600 rounded-tl-xl rounded-tr-[100px] rounded-bl-xl rounded-br-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
                     >
                         <div className="justify-start text-white text-base font-semibold font-['Pretendard'] leading-snug">
                             저장하기
