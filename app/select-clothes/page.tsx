@@ -142,38 +142,8 @@ export default function SelectClothes() {
 
             {/* Mobile Container - Responsive Design */}
             <div className="w-full h-full md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
-                {/* Back Button */}
-                <div className="px-4 py-4 pt-8 md:pt-4">
-                    <button className="p-2">
-                        <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <mask
-                                id="mask0_18_347"
-                                style={{ maskType: "alpha" }}
-                                maskUnits="userSpaceOnUse"
-                                x="0"
-                                y="0"
-                                width="24"
-                                height="24"
-                            >
-                                <rect width="24" height="24" fill="#D9D9D9" />
-                            </mask>
-                            <g mask="url(#mask0_18_347)">
-                                <path
-                                    d="M7.373 12.75L13.0693 18.4462L12 19.5L4.5 12L12 4.5L13.0693 5.55375L7.373 11.25H19.5V12.75H7.373Z"
-                                    fill="#1C1B1F"
-                                />
-                            </g>
-                        </svg>
-                    </button>
-                </div>
                 {/* Header */}
-                <div className="px-4 py-2 flex flex-col justify-center items-center gap-1">
+                <div className="mt-20 px-4 py-2 flex flex-col justify-center items-center gap-1">
                     <div className="inline-flex justify-center items-center gap-1">
                         <div className="opacity-70 text-center justify-start text-pink-600 text-base font-medium font-['Pretendard'] leading-snug">
                             입을 옷 선택
@@ -213,7 +183,7 @@ export default function SelectClothes() {
                     <div className="text-center justify-start text-stone-900 text-2xl font-semibold font-['Pretendard'] leading-7">
                         어떤 옷을 입힐지 알려주세요
                     </div>
-                    <div className="text-center justify-start text-black/70 text-base font-medium font-['Pretendard'] leading-snug">
+                    <div className="text-center justify-start text-black/50 text-base font-medium font-['Pretendard'] leading-snug">
                         되도록 옷만 있는 사진을 선택해주세요!
                     </div>
                 </div>
@@ -296,7 +266,7 @@ export default function SelectClothes() {
                         // 초기 업로드 화면
                         <div
                             onClick={() => setShowPopup(true)}
-                            className="w-96 py-6 bg-white/50 rounded-2xl outline-4 outline-offset-[-4px] outline-white inline-flex flex-col justify-center items-center gap-4 overflow-hidden cursor-pointer"
+                            className="w-86 py-6 bg-white/50 rounded-2xl outline-4 outline-offset-[-4px] outline-white inline-flex flex-col justify-center items-center gap-4 overflow-hidden cursor-pointer"
                         >
                             <svg
                                 width="49"

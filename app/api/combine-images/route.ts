@@ -69,11 +69,11 @@ export async function POST(req: NextRequest) {
         } else if (topImage) {
             imageParts.push(base64ToGenerativePart(topImage, "image/png"));
             promptText =
-                "첫번째 사진의 옷을 뒤에 있는 옷들로 바꿀꺼야. top에서 상의만 추출해서 배경을 투명하게 한 다음에 person의 사진을 아무것도 건들지말고, 상의를 교체해줘 person은 배경, 얼굴 등등 모든 구성 요소가 그대로 있고, 옷만 바껴야해 반드시 옷만 바꿔줘";
+                "첫번째 사진의 상의를 첨부한 top 사진의 상의로 바꿀꺼야. top에서 상의만 추출해서 배경을 투명하게 한 다음에 person의 사진을 아무것도 건들지말고, 상의를 교체해줘 person은 배경, 얼굴 등등 모든 구성 요소가 그대로 있고, 옷만 바껴야해 반드시 옷만 바꿔줘";
         } else if (bottomImage) {
             imageParts.push(base64ToGenerativePart(bottomImage, "image/png"));
             promptText =
-                "첫번째 사진의 옷을 뒤에 있는 옷들로 바꿀꺼야. bottom에서 하의만 추출해서 배경을 투명하게 한 다음에 person의 사진을 아무것도 건들지말고, 하의를 교체해줘 person은 배경, 얼굴 등등 모든 구성 요소가 그대로 있고, 옷만 바껴야해 반드시 옷만 바꿔줘";
+                "첫번째 사진의 하의를 첨부한 bottom 사진의 하의로 바꿀꺼야. bottom에서 하의만 추출해서 배경을 투명하게 한 다음에 person의 사진을 아무것도 건들지말고, 하의를 교체해줘 person은 배경, 얼굴 등등 모든 구성 요소가 그대로 있고, 옷만 바껴야해 반드시 옷만 바꿔줘";
         }
 
         const allParts = [{ text: promptText }, ...imageParts];
@@ -113,7 +113,7 @@ export async function POST(req: NextRequest) {
             console.error("Gemini API returned text instead of an image:", text);
             return NextResponse.json(
                 {
-                    error: "Failed to generate image. API returned text: " + text,
+                    error: "이미지 생성에 실패했어요. 조금 뒤에 다시 시도해주세요.",
                 },
                 { status: 500 },
             );

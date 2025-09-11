@@ -2,7 +2,7 @@ build-push:
 	gcloud builds submit --tag asia-northeast3-docker.pkg.dev/dr-labs-kr/look-thru-repo/look-thru-app
 
 deploy:
-		gcloud run deploy look-thru-service \                                                                                                                                    ─╯
+		gcloud run deploy look-thru-service \
   --image asia-northeast3-docker.pkg.dev/dr-labs-kr/look-thru-repo/look-thru-app \
   --platform managed \
   --region asia-northeast3 \
