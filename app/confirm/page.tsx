@@ -25,7 +25,7 @@ export default function ConfirmPage() {
 
     const handleTryOnClick = async () => {
         if (personImage && (topImage || bottomImage)) {
-            Mixpanel.track("Try On Clicked", {
+            Mixpanel.track("confirm 넘어감", {
                 topImage: !!topImage,
                 bottomImage: !!bottomImage,
             });
@@ -81,36 +81,6 @@ export default function ConfirmPage() {
             </div>
 
             <div className="w-full h-full md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
-                {/* Back Button */}
-                <div className="px-4 py-4 pt-8 md:pt-4">
-                    <button onClick={() => router.back()} className="p-2">
-                        <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <mask
-                                id="mask0_18_347"
-                                style={{ maskType: "alpha" }}
-                                maskUnits="userSpaceOnUse"
-                                x="0"
-                                y="0"
-                                width="24"
-                                height="24"
-                            >
-                                <rect width="24" height="24" fill="#D9D9D9" />
-                            </mask>
-                            <g mask="url(#mask0_18_347)">
-                                <path
-                                    d="M7.373 12.75L13.0693 18.4462L12 19.5L4.5 12L12 4.5L13.0693 5.55375L7.373 11.25H19.5V12.75H7.373Z"
-                                    fill="#1C1B1F"
-                                />
-                            </g>
-                        </svg>
-                    </button>
-                </div>
                 {/* Header */}
                 <div className="self-stretch py-4 flex flex-col justify-center items-center gap-1 overflow-hidden">
                     <div className="inline-flex justify-center items-center gap-1">
@@ -188,7 +158,10 @@ export default function ConfirmPage() {
                 {/* Bottom Navigation */}
                 <div className="self-stretch p-4 bg-white rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
                     <div
-                        onClick={() => router.back()}
+                        onClick={() => {
+                            router.back();
+                            Mixpanel.track("confirm 뒤로 감");
+                        }}
                         className="w-16 self-stretch bg-zinc-100 rounded-tl-[100px] rounded-tr-xl rounded-bl-[100px] rounded-br-xl flex justify-center items-center gap-2.5 cursor-pointer"
                     >
                         <svg

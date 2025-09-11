@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useClothesStore } from "../../stores/clothesStore";
 import Image from "next/image";
@@ -10,6 +10,7 @@ export default function ProcessingPage() {
     const router = useRouter();
     const { personImage, topImage, bottomImage, isLoading, resultImage, error } =
         useClothesStore();
+    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         if (!personImage || (!topImage && !bottomImage)) {
@@ -22,8 +23,12 @@ export default function ProcessingPage() {
     useEffect(() => {
         if (!isLoading) {
             if (resultImage) {
+                setProgress(100);
                 Mixpanel.track("Processing Succeeded");
-                router.push("/done");
+                const timer = setTimeout(() => {
+                    router.push("/done");
+                }, 500);
+                return () => clearTimeout(timer);
             } else if (error) {
                 Mixpanel.track("Processing Failed", { error });
                 // You might want to show the error to the user before redirecting
@@ -32,6 +37,30 @@ export default function ProcessingPage() {
             }
         }
     }, [isLoading, resultImage, error, router]);
+
+    useEffect(() => {
+        if (!isLoading) {
+            return;
+        }
+
+        const startTime = Date.now();
+        const sixtySeconds = 60 * 1000;
+        const fiftyNineSeconds = 59 * 1000;
+
+        const interval = setInterval(() => {
+            const elapsedTime = Date.now() - startTime;
+
+            if (elapsedTime >= fiftyNineSeconds) {
+                setProgress(99);
+                clearInterval(interval);
+            } else {
+                const newProgress = (elapsedTime / sixtySeconds) * 100;
+                setProgress(newProgress);
+            }
+        }, 100);
+
+        return () => clearInterval(interval);
+    }, [isLoading]);
 
     if (!personImage || (!topImage && !bottomImage)) {
         return null; // 리디렉션 중 렌더링 방지
@@ -98,12 +127,17 @@ export default function ProcessingPage() {
                     <div className="flex-1 inline-flex flex-col justify-start items-start gap-2">
                         <div className="self-stretch px-0.5 inline-flex justify-between items-start">
                             <div className="text-center justify-start text-stone-900/80 text-sm font-medium font-['Pretendard'] leading-tight">
-                                {error ? "오류 발생" : "현재 진행 중..."}
+                                {error
+                                    ? "오류 발생"
+                                    : `현재 진행 중... ${Math.floor(progress)}%`}
                             </div>
                         </div>
                         <div className="self-stretch h-2 bg-white/40 rounded-[100px] flex flex-col justify-center items-start gap-2.5 overflow-hidden">
                             {!error && (
-                                <div className="h-full bg-pink-600 rounded-2xl animate-pulse w-full" />
+                                <div
+                                    className="h-full bg-pink-600 rounded-2xl"
+                                    style={{ width: `${progress}%` }}
+                                />
                             )}
                         </div>
                     </div>

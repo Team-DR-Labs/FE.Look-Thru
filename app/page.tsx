@@ -15,7 +15,7 @@ export default function Home() {
     }, [clearAllImages]);
 
     const handleStartClick = () => {
-        Mixpanel.track("시작");
+        Mixpanel.track("intro 넘어감");
         router.push("/select-clothes");
     };
 
