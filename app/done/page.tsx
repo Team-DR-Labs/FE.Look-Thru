@@ -45,7 +45,7 @@ export default function DonePage() {
         <div className="h-full bg-gray-100 flex items-center justify-center p-0 md:p-8">
             <div className="w-full h-full md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
                 {/* Header */}
-                <div className="self-stretch py-4 mt-16 flex flex-col justify-center items-center gap-4 overflow-hidden">
+                <div className="self-stretch py-4 mt-16 flex flex-col justify-center items-center gap-1 overflow-hidden">
                     <div className="inline-flex justify-center items-center gap-2">
                         <div className="opacity-70 text-center justify-start text-pink-600 text-base font-medium font-['Pretendard'] leading-snug">
                             옷 갈아입기 성공!
@@ -86,12 +86,11 @@ export default function DonePage() {
                         옷을 갈아입었어요!
                     </div>
                 </div>
-
                 {/* Main Content */}
-                <div className="self-stretch flex-1 px-5 py-4 flex justify-center items-center overflow-hidden">
-                    <div className="relative w-full h-full">
+                <div className="self-stretch flex-1 px-5 py-5 flex justify-center items-center overflow-hidden">
+                    <div className="relative w-full h-full rounded-2xl overflow-hidden">
                         <Image
-                            className="rounded-2xl object-contain"
+                            className="object-cover"
                             src={resultImage}
                             alt="Done"
                             fill
@@ -100,20 +99,22 @@ export default function DonePage() {
                 </div>
 
                 {/* Bottom Navigation */}
-                <div className="w-full p-4 bg-white rounded-t-3xl inline-flex justify-start items-start gap-1">
+                <div className="w-96 p-4 pb-12 bg-white rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
+                    <button
+                        onClick={handleMainPage}
+                        className="flex-1 self-stretch bg-zinc-100 rounded-tl-[100px] rounded-tr-xl rounded-bl-[100px] rounded-br-xl flex justify-center items-center gap-2.5"
+                    >
+                        <div className="justify-start text-stone-900 text-base font-semibold font-['Pretendard'] leading-snug">
+                            처음으로 돌아가기
+                        </div>
+                    </button>
                     <button
                         onClick={handleSaveImage}
-                        className="flex-1 h-16 py-4 bg-pink-600 rounded-full inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
+                        className="flex-1 h-16 py-4 bg-pink-600 rounded-tl-xl rounded-tr-[100px] rounded-bl-xl rounded-br-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
                     >
                         <div className="justify-start text-white text-base font-semibold font-['Pretendard'] leading-snug">
                             저장하기
                         </div>
-                    </button>
-                    <button
-                        onClick={handleMainPage}
-                        className="flex-1 h-16 py-4 bg-pink-600 rounded-full inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
-                    >
-                        메인페이지로 가기
                     </button>
                 </div>
             </div>

@@ -65,22 +65,22 @@ export async function POST(req: NextRequest) {
             imageParts.push(base64ToGenerativePart(topImage, "image/png"));
             imageParts.push(base64ToGenerativePart(bottomImage, "image/png"));
             promptText =
-                "첫번째 사진의 옷을 뒤에 있는 옷들로 바꿀꺼야. top과 bottom에서 옷들만 추출해서 배경을 투명하게 한 다음에 person의 사진을 아무것도 건들지말고, top은 상의 bottom은 하의로 옷을 교체해줘 person은 배경, 얼굴 등등 모든 구성 요소가 그대로 있고, 옷만 바껴야해 반드시 옷만 바꿔줘";
+                "첫 번째 이미지는 사람의 전신 사진입니다. 두 번째 이미지는 교체할 상의 옷입니다. 세 번째 이미지는 교체할 하의 옷입니다. 첫 번째 사람 사진의 다른 부분(얼굴, 배경, 자세 등)은 그대로 유지한 채, 원래 입고 있던 상의와 하의를 각각 두 번째와 세 번째 이미지의 옷으로 자연스럽게 합성해주세요. 옷만 정확하게 바꿔주세요.";
         } else if (topImage) {
             imageParts.push(base64ToGenerativePart(topImage, "image/png"));
             promptText =
-                "첫번째 사진의 상의를 첨부한 top 사진의 상의로 바꿀꺼야. top에서 상의만 추출해서 배경을 투명하게 한 다음에 person의 사진을 아무것도 건들지말고, 상의를 교체해줘 person은 배경, 얼굴 등등 모든 구성 요소가 그대로 있고, 옷만 바껴야해 반드시 옷만 바꿔줘";
+                "첫 번째 이미지는 사람의 전신 사진입니다. 두 번째 이미지는 교체할 상의 옷입니다. 첫 번째 사람 사진의 다른 부분(얼굴, 배경, 자세, 하의 등)은 그대로 유지한 채, 원래 입고 있던 상의만 두 번째 이미지의 옷으로 자연스럽게 합성해주세요. 상의만 정확하게 바꿔주세요.";
         } else if (bottomImage) {
             imageParts.push(base64ToGenerativePart(bottomImage, "image/png"));
             promptText =
-                "첫번째 사진의 하의를 첨부한 bottom 사진의 하의로 바꿀꺼야. bottom에서 하의만 추출해서 배경을 투명하게 한 다음에 person의 사진을 아무것도 건들지말고, 하의를 교체해줘 person은 배경, 얼굴 등등 모든 구성 요소가 그대로 있고, 옷만 바껴야해 반드시 옷만 바꿔줘";
+                "첫 번째 이미지는 사람의 전신 사진입니다. 두 번째 이미지는 교체할 하의 옷입니다. 첫 번째 사람 사진의 다른 부분(얼굴, 배경, 자세, 상의 등)은 그대로 유지한 채, 원래 입고 있던 하의만 두 번째 이미지의 옷으로 자연스럽게 합성해주세요. 하의만 정확하게 바꿔주세요.";
         }
 
         const allParts = [{ text: promptText }, ...imageParts];
 
         const result = await model.generateContent({
             contents: [{ role: "user", parts: allParts }],
-            generationConfig,
+            generationConfig, 
             safetySettings,
         });
 

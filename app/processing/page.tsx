@@ -23,8 +23,12 @@ export default function ProcessingPage() {
     useEffect(() => {
         if (!isLoading) {
             if (resultImage) {
+                setProgress(100);
                 Mixpanel.track("Processing Succeeded");
-                router.push("/done");
+                const timer = setTimeout(() => {
+                    router.push("/done");
+                }, 500);
+                return () => clearTimeout(timer);
             } else if (error) {
                 Mixpanel.track("Processing Failed", { error });
                 // You might want to show the error to the user before redirecting
@@ -36,7 +40,6 @@ export default function ProcessingPage() {
 
     useEffect(() => {
         if (!isLoading) {
-            setProgress(100);
             return;
         }
 

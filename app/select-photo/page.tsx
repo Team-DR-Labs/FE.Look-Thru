@@ -91,7 +91,7 @@ export default function SelectPhoto() {
                         어떤 사진에 입힐지 알려주세요
                     </div>
                     <div className="text-center justify-start text-black/50 text-base font-medium font-['Pretendard'] leading-snug">
-                        되도록 전신 사진을 선택해주세요!
+                    되도록 전신 사진을 선택해주세요!
                     </div>
                 </div>
 
