@@ -47,15 +47,6 @@ export default function SelectClothes() {
         }
     };
 
-    const handleTypeSelect = (type: string) => {
-        setCurrentUploadType(type);
-        setShowPopup(false);
-        // Use a timeout to ensure state update and popup close animation starts before file dialog opens
-        setTimeout(() => {
-            fileInputRef.current?.click();
-        }, 300); // Duration should be same as popup close animation
-    };
-
     const handleDeleteCloth = (type: "상의" | "하의") => {
         if (type === "상의") {
             deleteTopImage();
@@ -408,10 +399,12 @@ export default function SelectClothes() {
                                     return (
                                         <button
                                             key={item.name}
-                                            onClick={() =>
-                                                !isUploaded &&
-                                                handleTypeSelect(item.name)
-                                            }
+                                            onClick={() => {
+                                                if (isUploaded) return;
+                                                setCurrentUploadType(item.name);
+                                                fileInputRef.current?.click();
+                                                setShowPopup(false);
+                                            }}
                                             disabled={isUploaded}
                                             className={`w-full p-4 rounded-2xl border-2 transition-all ${
                                                 isUploaded
