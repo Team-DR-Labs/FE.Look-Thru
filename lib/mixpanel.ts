@@ -15,22 +15,26 @@ if (MIXPANEL_TOKEN) {
 export const Mixpanel = {
   identify: (id: string) => {
     if (MIXPANEL_TOKEN) {
+      console.log('Mixpanel identify:', id);
       mixpanel.identify(id);
     }
   },
   alias: (id: string) => {
     if (MIXPANEL_TOKEN) {
+      console.log('Mixpanel alias:', id);
       mixpanel.alias(id);
     }
   },
   track: (name: string, props?: object) => {
     if (MIXPANEL_TOKEN) {
+      console.log('Mixpanel track:', name, props);
       mixpanel.track(name, props);
     }
   },
   people: {
     set: (props: object) => {
       if (MIXPANEL_TOKEN) {
+        console.log('Mixpanel people set:', props);
         mixpanel.people.set(props);
       }
     },

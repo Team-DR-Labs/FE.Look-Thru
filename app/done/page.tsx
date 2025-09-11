@@ -15,21 +15,15 @@ export default function DonePage() {
         if (!resultImage) {
             router.replace("/select-clothes");
         } else {
-            Mixpanel.track("Reached Done Page");
+            Mixpanel.track("여기 confirm 페이지 도달");
         }
     }, [resultImage, router]);
 
     const handleSaveImage = () => {
         if (resultImage) {
-            Mixpanel.track("Image Saved");
+            Mixpanel.track("confirm 저장 누름");
             saveAs(resultImage, "look-thru-result.png");
         }
-    };
-
-    const handleRestart = () => {
-        clearAllImages();
-        Mixpanel.track("Restarted");
-        router.push("/select-clothes");
     };
 
     if (!resultImage) {
@@ -109,7 +103,9 @@ export default function DonePage() {
                         </div>
                     </button>
                     <button
-                        onClick={handleSaveImage}
+                        onClick={() => {
+                            Mixpanel.track("confirm 저장 누름");
+                        }}
                         className="flex-1 h-16 py-4 bg-pink-600 rounded-tl-xl rounded-tr-[100px] rounded-bl-xl rounded-br-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
                     >
                         <div className="justify-start text-white text-base font-semibold font-['Pretendard'] leading-snug">

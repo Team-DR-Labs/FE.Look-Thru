@@ -25,6 +25,7 @@ export default function SelectClothes() {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        Mixpanel.track("select-clothes 의상 업로드");
         const file = event.target.files?.[0];
         if (file && currentUploadType) {
             const reader = new FileReader();
@@ -32,10 +33,10 @@ export default function SelectClothes() {
                 const imageUrl = e.target?.result as string;
                 if (currentUploadType === "상의") {
                     setTopImage(imageUrl);
-                    Mixpanel.track("상의선택");
+                    Mixpanel.track("select-clothes 상의 업로드");
                 } else if (currentUploadType === "하의") {
                     setBottomImage(imageUrl);
-                    Mixpanel.track("하의선택");
+                    Mixpanel.track("select-clothes 하의 업로드");
                 }
                 setCurrentUploadType(null); // Reset after upload
             };
@@ -341,7 +342,7 @@ export default function SelectClothes() {
                     <button
                         onClick={() => {
                             if (uploadedClothes.length > 0) {
-                                Mixpanel.track("다음 클릭", {
+                                Mixpanel.track("select-clothes 넘어감", {
                                     topImage: !!topImage,
                                     bottomImage: !!bottomImage,
                                 });

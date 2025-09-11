@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import Image from "next/image";
 import { useClothesStore } from "../../stores/clothesStore";
 import { useRouter } from "next/navigation";
+import { Mixpanel } from "@/lib/mixpanel";
 
 export default function SelectPhoto() {
     const {
@@ -22,6 +23,7 @@ export default function SelectPhoto() {
     }, [topImage, bottomImage, router]);
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        Mixpanel.track("select-photo 사진 업로드");
         const file = event.target.files?.[0];
         if (file) {
             const reader = new FileReader();
@@ -34,6 +36,7 @@ export default function SelectPhoto() {
 
     const handleNextClick = () => {
         if (personImage && (topImage || bottomImage)) {
+            Mixpanel.track("select-photo 넘어감");
             router.push("/confirm");
         }
     };
@@ -142,7 +145,7 @@ export default function SelectPhoto() {
                                         />
                                     </g>
                                 </svg>
-                                <div className="text-center justify-start text-stone-900/50 text-base font-medium font-['Pretendard'] leading-snug">
+                                <div onClick={() => Mixpanel.track("select-photo 사진 재업로드")} className="text-center justify-start text-stone-900/50 text-base font-medium font-['Pretendard'] leading-snug">
                                     재업로드
                                 </div>
                             </button>

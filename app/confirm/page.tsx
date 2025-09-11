@@ -25,7 +25,7 @@ export default function ConfirmPage() {
 
     const handleTryOnClick = async () => {
         if (personImage && (topImage || bottomImage)) {
-            Mixpanel.track("Try On Clicked", {
+            Mixpanel.track("confirm 넘어감", {
                 topImage: !!topImage,
                 bottomImage: !!bottomImage,
             });
@@ -158,7 +158,10 @@ export default function ConfirmPage() {
                 {/* Bottom Navigation */}
                 <div className="self-stretch p-4 bg-white rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
                     <div
-                        onClick={() => router.back()}
+                        onClick={() => {
+                            router.back();
+                            Mixpanel.track("confirm 뒤로 감");
+                        }}
                         className="w-16 self-stretch bg-zinc-100 rounded-tl-[100px] rounded-tr-xl rounded-bl-[100px] rounded-br-xl flex justify-center items-center gap-2.5 cursor-pointer"
                     >
                         <svg
