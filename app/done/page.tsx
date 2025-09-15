@@ -93,7 +93,7 @@ export default function DonePage() {
                 </div>
 
                 {/* Bottom Navigation */}
-                <div className="w-96 p-4 pb-12 bg-white rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
+                <div className="w-full p-4 pb-12 bg-white rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
                     <button
                         onClick={handleMainPage}
                         className="flex-1 self-stretch bg-zinc-100 rounded-tl-[100px] rounded-tr-xl rounded-bl-[100px] rounded-br-xl flex justify-center items-center gap-2.5"
@@ -105,6 +105,7 @@ export default function DonePage() {
                     <button
                         onClick={() => {
                             Mixpanel.track("confirm 저장 누름");
+                            handleSaveImage();
                         }}
                         className="flex-1 h-16 py-4 bg-pink-600 rounded-tl-xl rounded-tr-[100px] rounded-bl-xl rounded-br-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
                     >

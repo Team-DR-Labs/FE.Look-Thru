@@ -82,7 +82,7 @@ export default function ConfirmPage() {
 
             <div className="w-full h-full md:w-96 md:h-[852px] bg-[radial-gradient(ellipse_100.00%_100.00%_at_50.00%_100.00%,_#FFC4E6_0%,_white_100%)] md:rounded-[56px] overflow-hidden relative z-10 flex flex-col">
                 {/* Header */}
-                <div className="self-stretch py-4 flex flex-col justify-center items-center gap-1 overflow-hidden">
+                <div className="mt-13 self-stretch py-4 flex flex-col justify-center items-center gap-1 overflow-hidden">
                     <div className="inline-flex justify-center items-center gap-1">
                         <div className="opacity-70 text-center justify-start text-pink-600 text-base font-medium font-['Pretendard'] leading-snug">
                             최종 확인

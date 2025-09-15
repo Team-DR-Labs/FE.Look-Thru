@@ -32,7 +32,7 @@ export default function ProcessingPage() {
             } else if (error) {
                 Mixpanel.track("Processing Failed", { error });
                 // You might want to show the error to the user before redirecting
-                alert(`An error occurred: ${error}`);
+                alert(`이미지 생성에 실패했어요. 조금 이따가 시도해주세요.`);
                 router.back();
             }
         }
