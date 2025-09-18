@@ -11,10 +11,19 @@ export default function SelectClothes() {
     const {
         topImage,
         bottomImage,
+        hatImage,
+        outerwearImage,
+        shoesImage,
         setTopImage,
         setBottomImage,
+        setHatImage,
+        setOuterwearImage,
+        setShoesImage,
         deleteTopImage,
         deleteBottomImage,
+        deleteHatImage,
+        deleteOuterwearImage,
+        deleteShoesImage,
     } = useClothesStore();
 
     const router = useRouter();
@@ -37,6 +46,15 @@ export default function SelectClothes() {
                 } else if (currentUploadType === "하의") {
                     setBottomImage(imageUrl);
                     Mixpanel.track("select-clothes 하의 업로드");
+                } else if (currentUploadType === "모자") {
+                    setHatImage(imageUrl);
+                    Mixpanel.track("select-clothes 모자 업로드");
+                } else if (currentUploadType === "아우터") {
+                    setOuterwearImage(imageUrl);
+                    Mixpanel.track("select-clothes 아우터 업로드");
+                } else if (currentUploadType === "신발") {
+                    setShoesImage(imageUrl);
+                    Mixpanel.track("select-clothes 신발 업로드");
                 }
                 setCurrentUploadType(null); // Reset after upload
             };
@@ -48,13 +66,24 @@ export default function SelectClothes() {
         }
     };
 
-    const handleDeleteCloth = (type: "상의" | "하의") => {
+    const handleDeleteCloth = (
+        type: "상의" | "하의" | "모자" | "아우터" | "신발",
+    ) => {
         if (type === "상의") {
             deleteTopImage();
             Mixpanel.track("상의 삭제");
-        } else {
+        } else if (type === "하의") {
             deleteBottomImage();
             Mixpanel.track("하의 삭제");
+        } else if (type === "모자") {
+            deleteHatImage();
+            Mixpanel.track("모자 삭제");
+        } else if (type === "아우터") {
+            deleteOuterwearImage();
+            Mixpanel.track("아우터 삭제");
+        } else if (type === "신발") {
+            deleteShoesImage();
+            Mixpanel.track("신발 삭제");
         }
     };
 
@@ -63,61 +92,126 @@ export default function SelectClothes() {
     };
 
     const clothesTypes = [
-        { 
-            name: "상의", 
+        {
+            name: "상의",
             emoji: (
-                <svg width="36" height="37" viewBox="0 0 36 37" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g clipPath="url(#clip0_18_792)">
-                        <path d="M28.71 10.4198V4.58601C28.71 4.06851 28.2906 3.64911 27.7731 3.64911H24.4188C23.9013 3.64911 23.4819 4.06851 23.4819 4.58601V5.50671C23.4819 8.50911 21.1689 11.1263 18.1683 11.2172C15.0633 11.3108 12.5172 8.82141 12.5172 5.73711V4.58691C12.5172 4.06941 12.0978 3.65001 11.5803 3.65001H8.22603C7.70853 3.65001 7.28913 4.06941 7.28913 4.58691V10.4207C7.28913 12.3134 6.80943 13.982 6.08043 14.9666C5.15253 16.2203 4.54773 17.681 4.54773 19.2407V31.4771C4.54773 32.5121 5.38653 33.35 6.42063 33.35H29.5767C30.6117 33.35 31.4496 32.5112 31.4496 31.4771V19.2407C31.4496 17.681 30.8448 16.2203 29.9169 14.9666C29.1879 13.9811 28.7082 12.3125 28.7082 10.4207L28.71 10.4198Z" fill="#93C9FF"/>
-                        <path d="M28.71 10.3766V4.58601C28.71 4.06851 28.2906 3.64911 27.7731 3.64911H26.1027C24.3585 19.4216 15.3603 31.4762 4.54858 31.4762C4.54858 32.5103 5.38738 33.3491 6.42148 33.3491H12.5631C20.0907 29.741 26.0811 21.2018 28.71 10.3757V10.3766Z" fill="#4D9DFF"/>
+                <svg width="37" height="36" viewBox="0 0 37 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clipPath="url(#clip0_180_5793)">
+                    <path d="M28.96 9.91981V4.08601C28.96 3.56851 28.5406 3.14911 28.0231 3.14911H24.6688C24.1513 3.14911 23.7319 3.56851 23.7319 4.08601V5.00671C23.7319 8.00911 21.4189 10.6263 18.4183 10.7172C15.3133 10.8108 12.7672 8.32141 12.7672 5.23711V4.08691C12.7672 3.56941 12.3478 3.15001 11.8303 3.15001H8.476C7.9585 3.15001 7.5391 3.56941 7.5391 4.08691V9.92071C7.5391 11.8134 7.0594 13.482 6.3304 14.4666C5.4025 15.7203 4.7977 17.181 4.7977 18.7407V30.9771C4.7977 32.0121 5.6365 32.85 6.6706 32.85H29.8267C30.8617 32.85 31.6996 32.0112 31.6996 30.9771V18.7407C31.6996 17.181 31.0948 15.7203 30.1669 14.4666C29.4379 13.4811 28.9582 11.8125 28.9582 9.92071L28.96 9.91981Z" fill="#93C9FF"/>
+                    <path d="M28.96 9.87661V4.08601C28.96 3.56851 28.5406 3.14911 28.0231 3.14911H26.3527C24.6085 18.9216 15.6103 30.9762 4.79855 30.9762C4.79855 32.0103 5.63735 32.8491 6.67145 32.8491H12.8131C20.3407 29.241 26.3311 20.7018 28.96 9.87571V9.87661Z" fill="#4D9DFF"/>
                     </g>
                     <defs>
-                        <clipPath id="clip0_18_792">
-                            <rect width="36" height="36" fill="white" transform="translate(0 0.5)"/>
-                        </clipPath>
+                    <clipPath id="clip0_180_5793">
+                    <rect width="36" height="36" fill="white" transform="translate(0.25)"/>
+                    </clipPath>
                     </defs>
                 </svg>
-            ), 
-            desc: "반팔, 롱슬리브, 맨투맨, 후드티 등..." 
+            ),
         },
-        { 
-            name: "하의", 
+        {
+            name: "하의",
             emoji: (
-                <svg width="36" height="37" viewBox="0 0 36 37" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g clipPath="url(#clip0_18_801)">
-                        <path d="M18.468 16.6919L19.8999 34.25H28.7118V3.5033C28.7118 3.0875 28.3743 2.75 27.9585 2.75H8.04236C7.62656 2.75 7.28906 3.0875 7.28906 3.5033V34.25H16.101L17.5329 16.6919H18.468Z" fill="#466CFB"/>
-                        <path d="M7.28912 34.25H16.1001L16.4817 29.5763H7.28912V34.25Z" fill="#7D9DFF"/>
-                        <path d="M28.7109 34.25H19.8999L19.5183 29.5763H28.7109V34.25Z" fill="#7D9DFF"/>
-                        <path d="M8.04236 2.75H27.9576C28.3734 2.75 28.7109 3.0875 28.7109 3.5033V5.9234H7.28906V3.5033C7.28906 3.0875 7.62656 2.75 8.04236 2.75Z" fill="#3E5AF4"/>
-                        <path d="M11.2464 5.92432V7.88542C11.2464 10.0715 9.47431 11.8436 7.28821 11.8436V5.92432H11.2464Z" fill="#5D7EFB"/>
-                        <path d="M24.7536 5.92432V7.88542C24.7536 10.0715 26.5257 11.8436 28.7118 11.8436V5.92432H24.7536Z" fill="#5D7EFB"/>
-                        <path d="M16.4304 5.92432H18.4266V14.9153C17.325 14.9153 16.4304 14.0207 16.4304 12.9191V5.92432Z" fill="#7D9DFF"/>
-                    </g>
-                    <defs>
-                        <clipPath id="clip0_18_801">
-                            <rect width="36" height="36" fill="white" transform="translate(0 0.5)"/>
-                        </clipPath>
-                    </defs>
-                </svg>
-            ), 
-            desc: "반바지, 긴바지, 스커트 등..." 
+                <svg width="37" height="36" viewBox="0 0 37 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clipPath="url(#clip0_180_5800)">
+<path d="M19.218 16.1919L20.6499 33.75H29.4618V3.0033C29.4618 2.5875 29.1243 2.25 28.7085 2.25H8.79236C8.37656 2.25 8.03906 2.5875 8.03906 3.0033V33.75H16.851L18.2829 16.1919H19.218Z" fill="#466CFB"/>
+<path d="M8.03912 33.75H16.8501L17.2317 29.0763H8.03912V33.75Z" fill="#7D9DFF"/>
+<path d="M29.4609 33.75H20.6499L20.2683 29.0763H29.4609V33.75Z" fill="#7D9DFF"/>
+<path d="M8.79236 2.25H28.7076C29.1234 2.25 29.4609 2.5875 29.4609 3.0033V5.4234H8.03906V3.0033C8.03906 2.5875 8.37656 2.25 8.79236 2.25Z" fill="#3E5AF4"/>
+<path d="M11.9964 5.42432V7.38542C11.9964 9.57152 10.2243 11.3436 8.03821 11.3436V5.42432H11.9964Z" fill="#5D7EFB"/>
+<path d="M25.5036 5.42432V7.38542C25.5036 9.57152 27.2757 11.3436 29.4618 11.3436V5.42432H25.5036Z" fill="#5D7EFB"/>
+<path d="M17.1804 5.42432H19.1766V14.4153C18.075 14.4153 17.1804 13.5207 17.1804 12.4191V5.42432Z" fill="#7D9DFF"/>
+</g>
+<defs>
+<clipPath id="clip0_180_5800">
+<rect width="36" height="36" fill="white" transform="translate(0.75)"/>
+</clipPath>
+</defs>
+</svg>
+
+            ),
+        },
+        {
+            name: "모자",
+            emoji: (
+                <svg width="37" height="36" viewBox="0 0 37 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clipPath="url(#clip0_180_5813)">
+<path d="M18.1667 7.10639C19.6603 7.10639 20.8712 6.42219 20.8712 5.57819C20.8712 4.73419 19.6603 4.04999 18.1667 4.04999C16.673 4.04999 15.4622 4.73419 15.4622 5.57819C15.4622 6.42219 16.673 7.10639 18.1667 7.10639Z" fill="#104BE0"/>
+<path d="M18.1666 5.42432C5.90324 5.42432 2.91524 15.4773 2.19074 20.061C1.98104 21.3894 2.42114 22.7349 3.38954 23.6691L18.1666 22.4226L32.9437 23.6691C33.9121 22.7358 34.3531 21.3903 34.1425 20.061C33.418 15.4773 30.4309 5.42432 18.1666 5.42432Z" fill="#2F81F9"/>
+<path d="M4.69453 22.5234L4.18423 22.6548C3.60643 22.8033 3.20233 23.3244 3.20233 23.9211L3.65953 27.2016C4.12033 30.5028 7.38373 32.6412 10.594 31.7457L13.1509 31.032C16.4314 30.1167 19.9 30.1167 23.1814 31.032L25.7383 31.7457C28.9486 32.6412 32.2129 30.5028 32.6728 27.2016L33.13 23.9211C33.13 23.3244 32.7259 22.8033 32.1481 22.6548L31.6378 22.5234C22.7998 20.2536 13.5325 20.2536 4.69453 22.5234Z" fill="#1033E0"/>
+</g>
+<defs>
+<clipPath id="clip0_180_5813">
+<rect width="36" height="36" fill="white" transform="translate(0.166656)"/>
+</clipPath>
+</defs>
+</svg>
+
+            ),
+        },
+        {
+            name: "아우터",
+            emoji: (
+                <svg width="37" height="36" viewBox="0 0 37 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clipPath="url(#clip0_180_5821)">
+<path d="M28.7978 9.7443C27.8177 6.6789 24.9692 4.599 21.7517 4.599H15.2483C12.0308 4.599 9.18233 6.6789 8.20223 9.7443L3.20363 30.9645C3.11183 31.3542 3.35753 31.743 3.74903 31.8276L7.66853 32.6727C8.05463 32.7555 8.43443 32.5107 8.51813 32.1246L11.5493 18.1152L12.5024 22.5522L10.7258 32.5692C10.6583 32.9499 10.9508 33.2991 11.3378 33.2991H25.6622C26.0492 33.2991 26.3417 32.9499 26.2742 32.5692L24.4976 22.5522L25.4507 18.1152L28.3244 32.1201C28.4036 32.508 28.7834 32.7573 29.1713 32.6763L33.2447 31.824C33.638 31.7421 33.8864 31.3515 33.7946 30.96L28.7969 9.7434L28.7978 9.7443Z" fill="#E6A400"/>
+<path d="M22.4663 3.00961C22.2323 2.81881 21.9407 2.70001 21.6239 2.70001H15.3788C15.0611 2.70001 14.7695 2.81791 14.5364 3.00961L18.5018 11.3976L22.4672 3.00961H22.4663Z" fill="#DF9F00"/>
+<path d="M18.501 11.3976L14.5356 3.00958C14.3358 3.17248 14.1774 3.38668 14.0973 3.64498L12.4602 8.93608C12.3846 9.18088 12.5673 9.42928 12.8238 9.42928H15.0522L13.0605 11.4156C12.8814 11.5938 12.9228 11.8935 13.1433 12.0168L17.1465 14.2623L18.501 11.3976Z" fill="#AD7800"/>
+<path d="M24.5409 8.93523L22.9038 3.64413C22.8237 3.38583 22.6644 3.17163 22.4655 3.00873L18.5001 11.3967L17.1456 14.2614L16.1682 16.3296L23.8578 12.0159C24.0783 11.8926 24.1188 11.5929 23.9406 11.4147L21.9489 9.42843H24.1773C24.4338 9.42843 24.6165 9.18003 24.5409 8.93523Z" fill="#AD7800"/>
+<path d="M15.809 19.9998C16.3106 19.9998 16.7171 19.5932 16.7171 19.0917C16.7171 18.5902 16.3106 18.1836 15.809 18.1836C15.3075 18.1836 14.9009 18.5902 14.9009 19.0917C14.9009 19.5932 15.3075 19.9998 15.809 19.9998Z" fill="#B87F00"/>
+<path d="M21.5573 19.9998C22.0589 19.9998 22.4654 19.5932 22.4654 19.0917C22.4654 18.5902 22.0589 18.1836 21.5573 18.1836C21.0558 18.1836 20.6492 18.5902 20.6492 19.0917C20.6492 19.5932 21.0558 19.9998 21.5573 19.9998Z" fill="#B87F00"/>
+<path d="M15.809 28.044C16.3106 28.044 16.7171 27.6375 16.7171 27.1359C16.7171 26.6344 16.3106 26.2278 15.809 26.2278C15.3075 26.2278 14.9009 26.6344 14.9009 27.1359C14.9009 27.6375 15.3075 28.044 15.809 28.044Z" fill="#B87F00"/>
+<path d="M21.5573 28.044C22.0589 28.044 22.4654 27.6375 22.4654 27.1359C22.4654 26.6344 22.0589 26.2278 21.5573 26.2278C21.0558 26.2278 20.6492 26.6344 20.6492 27.1359C20.6492 27.6375 21.0558 28.044 21.5573 28.044Z" fill="#B87F00"/>
+<path d="M18.501 11.3976L16.1682 13.7142L17.1465 14.2623L18.501 11.3976Z" fill="#875E00"/>
+<path d="M24.6623 21.8538H12.353V23.4756H24.6623V21.8538Z" fill="#B87F00"/>
+</g>
+<defs>
+<clipPath id="clip0_180_5821">
+<rect width="36" height="36" fill="white" transform="translate(0.5)"/>
+</clipPath>
+</defs>
+</svg>
+
+            ),
+        },
+        {
+            name: "신발",
+            emoji: (
+                <svg width="37" height="36" viewBox="0 0 37 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clipPath="url(#clip0_180_5836)">
+<path d="M4.42429 24.7293C3.44329 24.7293 2.68639 23.8644 2.81599 22.8924L4.52059 10.1331C4.66279 9.07111 5.93989 8.60401 6.73369 9.32311C13.2137 15.1974 17.8757 9.09181 17.8757 9.09181L33.0704 20.538C34.703 21.7674 35.6048 23.7375 35.4698 25.7769L35.468 25.8084L4.42429 24.7293Z" fill="#CCDFE3"/>
+<path d="M17.8757 9.09811L14.7617 7.04431C14.7617 7.04431 12.9122 9.49501 14.2676 11.583C14.2676 11.583 15.8219 11.4174 17.8757 9.09811Z" fill="#4E7698"/>
+<path d="M18.9395 16.155C19.6172 16.7436 20.6441 16.6707 21.2327 15.993L23.5142 13.3641L20.9537 11.4183L18.7766 13.8618C18.188 14.5395 18.2618 15.5664 18.9395 16.155Z" fill="#4E7698"/>
+<path d="M23.7257 18.5049C24.4034 19.0935 25.4303 19.0206 26.0189 18.3429L27.6506 16.4628L25.0478 14.5017L23.5637 16.2117C22.9751 16.8894 23.048 17.9163 23.7257 18.5049Z" fill="#4E7698"/>
+<path d="M3.95359 28.9557H32.4017C34.1657 28.9557 35.5103 27.4914 35.468 25.8084L2.84929 22.7592L2.19949 26.9514C2.05729 28.0125 2.88259 28.9557 3.95359 28.9557Z" fill="#4E7698"/>
+<path d="M3.617 17.0092C3.617 17.0092 8.6552 18.8677 9.3023 23.3632L2.8493 22.7602L3.6179 17.0101L3.617 17.0092Z" fill="#7B9FC2"/>
+</g>
+<defs>
+<clipPath id="clip0_180_5836">
+<rect width="36" height="36" fill="white" transform="translate(0.833313)"/>
+</clipPath>
+</defs>
+</svg>
+
+            ),
         },
     ];
 
     const uploadedClothes = [];
     if (topImage) uploadedClothes.push({ type: "상의", image: topImage });
     if (bottomImage) uploadedClothes.push({ type: "하의", image: bottomImage });
+    if (hatImage) uploadedClothes.push({ type: "모자", image: hatImage });
+    if (outerwearImage)
+        uploadedClothes.push({ type: "아우터", image: outerwearImage });
+    if (shoesImage) uploadedClothes.push({ type: "신발", image: shoesImage });
 
     const hasTop = !!topImage;
     const hasBottom = !!bottomImage;
-    const isFull = hasTop && hasBottom;
+    const hasHat = !!hatImage;
+    const hasOuterwear = !!outerwearImage;
+    const hasShoes = !!shoesImage;
 
     const handleAddClick = () => {
-        if (isFull) {
-            toast.error("상의, 하의 하나씩만 선택할 수 있어요");
-        } else {
-            setShowPopup(true);
-        }
+        setShowPopup(true);
     };
 
     return (
@@ -185,7 +279,7 @@ export default function SelectClothes() {
                     {uploadedClothes.length > 0 ? (
                         <>
                             {/* 옷 추가하기 버튼 */}
-                            {!isFull && (
+                            {uploadedClothes.length < 5 && (
                                 <button
                                     onClick={handleAddClick}
                                     className="pl-4 pr-5 py-2.5 bg-white/70 rounded-[100px] outline-2 outline-offset-[-2px] outline-white inline-flex justify-center items-center gap-1.5 hover:bg-white/80 transition-colors"
@@ -233,7 +327,10 @@ export default function SelectClothes() {
                                                 handleDeleteCloth(
                                                     cloth.type as
                                                         | "상의"
-                                                        | "하의",
+                                                        | "하의"
+                                                        | "모자"
+                                                        | "아우터"
+                                                        | "신발",
                                                 )
                                             }
                                             className="absolute top-2 right-2 bg-red-500 bg-opacity-80 text-white rounded-full p-1.5"
@@ -371,29 +468,24 @@ export default function SelectClothes() {
                     className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm md:items-center"
                     onClick={closePopup}
                 >
-                    {/* 팝업 컨텐츠 */}
                     <div
                         onClick={(e) => e.stopPropagation()}
                         className={`relative w-full md:w-96 bg-white rounded-t-3xl md:rounded-3xl transform transition-transform duration-300 ${
                             showPopup ? "translate-y-0" : "translate-y-full"
                         }`}
                     >
-                        {/* 핸들 바 (모바일용) */}
                         <div className="w-full flex justify-center pt-3 pb-2 md:hidden">
                             <div className="w-10 h-1 bg-gray-300 rounded-full"></div>
                         </div>
 
-                        {/* 팝업 헤더 */}
-                        <div className="px-6 py-4 border-b border-gray-100">
-                            <h3 className="text-lg font-semibold text-gray-900 font-['Pretendard']">
+                        <div className="self-stretch px-4 py-3 inline-flex justify-start items-center gap-2.5">
+                            <div className="text-center justify-start text-stone-900 text-lg font-semibold font-['Pretendard'] leading-relaxed">
                                 종류 선택
-                            </h3>
+                            </div>
                         </div>
-
-                        {/* 옷 종류 목록 */}
-                        <div className="px-6 py-6">
-                            <div className="space-y-4">
-                                {clothesTypes.map((item) => {
+                        <div className="w-full px-3 py-2 flex flex-col justify-center items-start gap-2">
+                            <div className="self-stretch inline-flex justify-start items-start gap-2">
+                                {clothesTypes.slice(0, 2).map((item) => {
                                     const isUploaded =
                                         (item.name === "상의" && hasTop) ||
                                         (item.name === "하의" && hasBottom);
@@ -407,36 +499,73 @@ export default function SelectClothes() {
                                                 setShowPopup(false);
                                             }}
                                             disabled={isUploaded}
-                                            className={`w-full p-4 rounded-2xl border-2 transition-all ${
+                                            className={`flex-1 p-4 rounded-xl inline-flex flex-col justify-center items-center gap-1 transition-colors ${
                                                 isUploaded
-                                                    ? "border-gray-200 bg-gray-100 cursor-not-allowed"
-                                                    : "border-gray-200 bg-white hover:border-pink-200 hover:bg-pink-50"
+                                                    ? "bg-gray-200 cursor-not-allowed"
+                                                    : "bg-zinc-100 hover:bg-pink-50"
                                             }`}
                                         >
-                                            <div className="flex items-center gap-4">
-                                                <div
-                                                    className={`text-3xl ${
-                                                        isUploaded
-                                                            ? "opacity-50"
-                                                            : ""
-                                                    }`}
-                                                >
-                                                    {item.emoji}
-                                                </div>
-                                                <div
-                                                    className={`flex-1 text-left ${
-                                                        isUploaded
-                                                            ? "opacity-50"
-                                                            : ""
-                                                    }`}
-                                                >
-                                                    <div className="font-semibold text-gray-900 font-['Pretendard']">
-                                                        {item.name}
-                                                    </div>
-                                                    <div className="text-sm text-gray-500 font-['Pretendard']">
-                                                        {item.desc}
-                                                    </div>
-                                                </div>
+                                            <div
+                                                className={`w-9 h-9 relative overflow-hidden ${
+                                                    isUploaded
+                                                        ? "opacity-50"
+                                                        : ""
+                                                }`}
+                                            >
+                                                {item.emoji}
+                                            </div>
+                                            <div
+                                                className={`justify-start text-base font-medium font-['Pretendard'] leading-snug ${
+                                                    isUploaded
+                                                        ? "text-gray-400"
+                                                        : "text-stone-900"
+                                                }`}
+                                            >
+                                                {item.name}
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                            <div className="self-stretch inline-flex justify-start items-start gap-2">
+                                {clothesTypes.slice(2, 5).map((item) => {
+                                    const isUploaded =
+                                        (item.name === "모자" && hasHat) ||
+                                        (item.name === "아우터" && hasOuterwear) ||
+                                        (item.name === "신발" && hasShoes);
+                                    return (
+                                        <button
+                                            key={item.name}
+                                            onClick={() => {
+                                                if (isUploaded) return;
+                                                setCurrentUploadType(item.name);
+                                                fileInputRef.current?.click();
+                                                setShowPopup(false);
+                                            }}
+                                            disabled={isUploaded}
+                                            className={`flex-1 p-4 rounded-xl inline-flex flex-col justify-center items-center gap-1 transition-colors ${
+                                                isUploaded
+                                                    ? "bg-gray-200 cursor-not-allowed"
+                                                    : "bg-zinc-100 hover:bg-pink-50"
+                                            }`}
+                                        >
+                                            <div
+                                                className={`w-9 h-9 relative overflow-hidden ${
+                                                    isUploaded
+                                                        ? "opacity-50"
+                                                        : ""
+                                                }`}
+                                            >
+                                                {item.emoji}
+                                            </div>
+                                            <div
+                                                className={`justify-start text-base font-medium font-['Pretendard'] leading-snug ${
+                                                    isUploaded
+                                                        ? "text-gray-400"
+                                                        : "text-stone-900"
+                                                }`}
+                                            >
+                                                {item.name}
                                             </div>
                                         </button>
                                     );

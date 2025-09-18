@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import { useClothesStore } from "../../stores/clothesStore";
 import { useRouter } from "next/navigation";
@@ -12,15 +12,32 @@ export default function SelectPhoto() {
         setPersonImage,
         topImage,
         bottomImage,
+        hatImage,
+        outerwearImage,
+        shoesImage,
     } = useClothesStore();
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [showPrivacyPopup, setShowPrivacyPopup] = useState(false);
 
     useEffect(() => {
-        if (!topImage && !bottomImage) {
+        if (
+            !topImage &&
+            !bottomImage &&
+            !hatImage &&
+            !outerwearImage &&
+            !shoesImage
+        ) {
             router.replace("/select-clothes");
         }
-    }, [topImage, bottomImage, router]);
+    }, [
+        topImage,
+        bottomImage,
+        hatImage,
+        outerwearImage,
+        shoesImage,
+        router,
+    ]);
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         Mixpanel.track("select-photo 사진 업로드");
@@ -35,13 +52,22 @@ export default function SelectPhoto() {
     };
 
     const handleNextClick = () => {
-        if (personImage && (topImage || bottomImage)) {
+        if (
+            personImage &&
+            (topImage || bottomImage || hatImage || outerwearImage || shoesImage)
+        ) {
             Mixpanel.track("select-photo 넘어감");
             router.push("/confirm");
         }
     };
 
-    if (!topImage && !bottomImage) {
+    if (
+        !topImage &&
+        !bottomImage &&
+        !hatImage &&
+        !outerwearImage &&
+        !shoesImage
+    ) {
         return null; // 리디렉션 중 렌더링 방지
     }
 
@@ -151,47 +177,89 @@ export default function SelectPhoto() {
                             </button>
                         </>
                     ) : (
-                        <div
-                            onClick={() => fileInputRef.current?.click()}
-                            className="w-full h-96 bg-white/50 rounded-2xl outline-4 outline-offset-[-4px] outline-white flex flex-col justify-center items-center gap-2 overflow-hidden cursor-pointer"
-                        >
-                            <svg
-                                width="65"
-                                height="65"
-                                viewBox="0 0 65 65"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
+                        <>
+                            <div
+                                onClick={() => fileInputRef.current?.click()}
+                                className="w-full h-96 bg-white/50 rounded-2xl outline-4 outline-offset-[-4px] outline-white flex flex-col justify-center items-center gap-2 overflow-hidden cursor-pointer"
                             >
-                                <mask
-                                    id="mask0_18_382"
-                                    style={{ maskType: "alpha" }}
-                                    maskUnits="userSpaceOnUse"
-                                    x="0"
-                                    y="0"
+                                <svg
                                     width="65"
                                     height="65"
+                                    viewBox="0 0 65 65"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
                                 >
-                                    <rect
-                                        x="0.5"
-                                        y="0.5"
-                                        width="64"
-                                        height="64"
-                                        fill="#D9D9D9"
-                                    />
-                                </mask>
-                                <g mask="url(#mask0_18_382)">
-                                    <path
-                                        d="M14.654 55.1667C13.3069 55.1667 12.1667 54.7 11.2334 53.7667C10.3 52.8333 9.83337 51.6931 9.83337 50.346V14.654C9.83337 13.3069 10.3 12.1667 11.2334 11.2333C12.1667 10.3 13.3069 9.83332 14.654 9.83332H35.372V13.8333H14.654C14.4487 13.8333 14.2607 13.9189 14.09 14.09C13.9189 14.2607 13.8334 14.4487 13.8334 14.654V50.346C13.8334 50.5513 13.9189 50.7393 14.09 50.91C14.2607 51.0811 14.4487 51.1667 14.654 51.1667H50.346C50.5514 51.1667 50.7394 51.0811 50.91 50.91C51.0812 50.7393 51.1667 50.5513 51.1667 50.346V32.4233H55.1667V50.346C55.1667 51.6931 54.7 52.8333 53.7667 53.7667C52.8334 54.7 51.6932 55.1667 50.346 55.1667H14.654ZM18.5 45.1667H46.7047L37.936 33.4747L30.4487 43.218L25.1154 36.3973L18.5 45.1667ZM48.782 26.8847V14.828L43.8487 19.6693L41.064 16.8847L50.782 7.16666L60.5 16.8847L57.7154 19.6693L52.782 14.828V26.8847H48.782Z"
-                                        fill="#1D1D1D"
-                                        fillOpacity="0.5"
-                                    />
-                                </g>
-                            </svg>
-                            <div className="text-center justify-start text-stone-900/50 text-xl font-medium font-['Pretendard'] leading-7">
-                                여기를 클릭하여 <br />
-                                사진을 업로드 해주세요
+                                    <mask
+                                        id="mask0_18_382"
+                                        style={{ maskType: "alpha" }}
+                                        maskUnits="userSpaceOnUse"
+                                        x="0"
+                                        y="0"
+                                        width="65"
+                                        height="65"
+                                    >
+                                        <rect
+                                            x="0.5"
+                                            y="0.5"
+                                            width="64"
+                                            height="64"
+                                            fill="#D9D9D9"
+                                        />
+                                    </mask>
+                                    <g mask="url(#mask0_18_382)">
+                                        <path
+                                            d="M14.654 55.1667C13.3069 55.1667 12.1667 54.7 11.2334 53.7667C10.3 52.8333 9.83337 51.6931 9.83337 50.346V14.654C9.83337 13.3069 10.3 12.1667 11.2334 11.2333C12.1667 10.3 13.3069 9.83332 14.654 9.83332H35.372V13.8333H14.654C14.4487 13.8333 14.2607 13.9189 14.09 14.09C13.9189 14.2607 13.8334 14.4487 13.8334 14.654V50.346C13.8334 50.5513 13.9189 50.7393 14.09 50.91C14.2607 51.0811 14.4487 51.1667 14.654 51.1667H50.346C50.5514 51.1667 50.7394 51.0811 50.91 50.91C51.0812 50.7393 51.1667 50.5513 51.1667 50.346V32.4233H55.1667V50.346C55.1667 51.6931 54.7 52.8333 53.7667 53.7667C52.8334 54.7 51.6932 55.1667 50.346 55.1667H14.654ZM18.5 45.1667H46.7047L37.936 33.4747L30.4487 43.218L25.1154 36.3973L18.5 45.1667ZM48.782 26.8847V14.828L43.8487 19.6693L41.064 16.8847L50.782 7.16666L60.5 16.8847L57.7154 19.6693L52.782 14.828V26.8847H48.782Z"
+                                            fill="#1D1D1D"
+                                            fillOpacity="0.5"
+                                        />
+                                    </g>
+                                </svg>
+                                <div className="text-center justify-start text-stone-900/50 text-xl font-medium font-['Pretendard'] leading-7">
+                                    여기를 클릭하여 <br />
+                                    사진을 업로드 해주세요
+                                </div>
                             </div>
-                        </div>
+                            <div
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setShowPrivacyPopup(true);
+                                }}
+                                className="pl-6 pr-7 py-3 bg-white/50 rounded-[100px] outline outline-2 outline-offset-[-2px] outline-white inline-flex justify-center items-center gap-2 overflow-hidden cursor-pointer"
+                            >
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 20 20"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <mask
+                                        id="mask0_180_5503"
+                                        style={{ maskType: "alpha" }}
+                                        maskUnits="userSpaceOnUse"
+                                        x="0"
+                                        y="0"
+                                        width="20"
+                                        height="20"
+                                    >
+                                        <rect
+                                            width="20"
+                                            height="20"
+                                            fill="#D9D9D9"
+                                        />
+                                    </mask>
+                                    <g mask="url(#mask0_180_5503)">
+                                        <path
+                                            d="M9.37504 13.9583H10.625V9.16665H9.37504V13.9583ZM10 7.7404C10.1907 7.7404 10.3506 7.67588 10.4796 7.54685C10.6087 7.41783 10.6732 7.25797 10.6732 7.06727C10.6732 6.87658 10.6087 6.71672 10.4796 6.58769C10.3506 6.4588 10.1907 6.39435 10 6.39435C9.80935 6.39435 9.64949 6.4588 9.52046 6.58769C9.39143 6.71672 9.32692 6.87658 9.32692 7.06727C9.32692 7.25797 9.39143 7.41783 9.52046 7.54685C9.64949 7.67588 9.80935 7.7404 10 7.7404ZM10.0015 17.9166C8.9065 17.9166 7.87726 17.7089 6.91379 17.2933C5.95032 16.8778 5.11226 16.3138 4.39962 15.6014C3.68698 14.8891 3.12275 14.0514 2.70692 13.0883C2.29122 12.1253 2.08337 11.0963 2.08337 10.0014C2.08337 8.90644 2.29115 7.8772 2.70671 6.91373C3.12226 5.95026 3.68622 5.1122 4.39858 4.39956C5.11094 3.68692 5.94865 3.12269 6.91171 2.70685C7.87476 2.29116 8.90372 2.08331 9.99858 2.08331C11.0936 2.08331 12.1228 2.29109 13.0863 2.70665C14.0498 3.1222 14.8878 3.68616 15.6005 4.39852C16.3131 5.11088 16.8773 5.94859 17.2932 6.91165C17.7089 7.8747 17.9167 8.90366 17.9167 9.99852C17.9167 11.0935 17.7089 12.1228 17.2934 13.0862C16.8778 14.0497 16.3139 14.8878 15.6015 15.6004C14.8891 16.313 14.0514 16.8773 13.0884 17.2931C12.1253 17.7088 11.0964 17.9166 10.0015 17.9166ZM10 16.6666C11.8612 16.6666 13.4375 16.0208 14.7292 14.7291C16.0209 13.4375 16.6667 11.8611 16.6667 9.99998C16.6667 8.13887 16.0209 6.56248 14.7292 5.27081C13.4375 3.97915 11.8612 3.33331 10 3.33331C8.13893 3.33331 6.56254 3.97915 5.27087 5.27081C3.97921 6.56248 3.33337 8.13887 3.33337 9.99998C3.33337 11.8611 3.97921 13.4375 5.27087 14.7291C6.56254 16.0208 8.13893 16.6666 10 16.6666Z"
+                                            fill="#E20181"
+                                        />
+                                    </g>
+                                </svg>
+                                <div className="text-center justify-start text-pink-600 text-base font-medium font-['Pretendard'] leading-snug">
+                                    걱정하지마세요!
+                                </div>
+                            </div>
+                        </>
                     )}
                 </div>
 
@@ -250,6 +318,46 @@ export default function SelectPhoto() {
                     </button>
                 </div>
             </div>
+            {showPrivacyPopup && (
+                <div
+                    className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm md:items-center"
+                    onClick={() => setShowPrivacyPopup(false)}
+                >
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        className={`relative w-full md:w-96 transform transition-transform duration-300 ${
+                            showPrivacyPopup ? "translate-y-0" : "translate-y-full"
+                        }`}
+                    >
+                        <div className="self-stretch  w-full p-2 inline-flex justify-start items-center gap-2.5 overflow-hidden">
+                            <div className="flex-1 pt-2 bg-white rounded-3xl inline-flex flex-col justify-start items-start overflow-hidden">
+                                <div className="self-stretch px-4 py-3 flex flex-col justify-center items-start gap-2.5">
+                                    <div className="text-center justify-start text-stone-900 text-lg font-semibold font-['Pretendard'] leading-relaxed">
+                                        LookThru는 사진을 저장하지 않아요.
+                                    </div>
+                                    <div className="self-stretch opacity-80 justify-start text-stone-900 text-base font-medium font-['Pretendard'] leading-relaxed">
+                                        LookThru에 업로드된 사진들은 AI로
+                                        가공된 뒤 <br /> 즉시 폐기되며 어떤
+                                        형태로도 서버에 남지 않습니다.
+                                    </div>
+                                </div>
+                                <div className="self-stretch p-3 bg-white rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
+                                    <div
+                                        onClick={() =>
+                                            setShowPrivacyPopup(false)
+                                        }
+                                        className="flex-1 h-16 py-4 bg-pink-600 rounded-3xl inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden cursor-pointer"
+                                    >
+                                        <div className="justify-start text-white text-base font-semibold font-['Pretendard'] leading-snug">
+                                            확인
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
