@@ -494,6 +494,12 @@ export default function SelectClothes() {
                                             key={item.name}
                                             onClick={() => {
                                                 if (isUploaded) return;
+                                                if (uploadedClothes.length >= 3) {
+                                                    toast.error(
+                                                        "최대 3개까지만 함께 입어볼 수 있어요",
+                                                    );
+                                                    return;
+                                                }
                                                 setCurrentUploadType(item.name);
                                                 fileInputRef.current?.click();
                                                 setShowPopup(false);
@@ -538,6 +544,12 @@ export default function SelectClothes() {
                                             key={item.name}
                                             onClick={() => {
                                                 if (isUploaded) return;
+                                                if (uploadedClothes.length >= 3) {
+                                                    toast.error(
+                                                        "최대 3개까지만 함께 입어볼 수 있어요",
+                                                    );
+                                                    return;
+                                                }
                                                 setCurrentUploadType(item.name);
                                                 fileInputRef.current?.click();
                                                 setShowPopup(false);

@@ -72,7 +72,23 @@ export async function POST(req: NextRequest) {
             );
         }
 
+        const basePrompt = `교체 대상 외 모든 요소(얼굴, 포즈, 배경, 의상, 소품 등)는 그대로 유지하세요. 합성되는 아이템만 자연스럽게 적용하고, 원본 조명과 체형에 맞춰 주름·그림자·질감을 반영해 실제 착용처럼 보이게 해주세요.`;
+
+        const detailedPrompts = {
+            topImage:
+                "상의는 첨부한 상의 이미지로 옷을 교체하세요. 손이나 겹치는 소품과 자연스럽게 연결하고, 긴팔→반팔 시 팔 피부톤을 얼굴 색 기준으로 맞춰주세요.",
+            bottomImage:
+                "하의는 첨부한 하의 이미지로 옷을 교체하세요. 앞뒤 디테일 구분하고, 긴바지→반바지 시 노출된 다리 피부톤을 얼굴 색 기준으로 보정하세요.",
+            hatImage:
+                "모자는 첨부한 모자 이미지로 옷을 교체하세요. 모자는 인물의 머리 크기와 각도에 맞게 정확히 씌우고, 헤어스타일을 자연스럽게 누르거나 감싸도록 합성하세요. 앞머리·옆머리가 어색하지 않게 정리하고, 원본 조명 방향에 맞춰 모자와 머리카락·얼굴에 그림자를 반영하세요.",
+            shoesImage:
+                "신발은 첨부한 이미지로 교체하고, 발과 자세에 맞게 조정하세요. 발목, 바닥과 자연스럽게 연결하고 원본 조명에 맞춰 그림자를 적용하세요.",
+            outerwearImage:
+                "아우터는 상의 위에 자연스럽게 걸치고, 열린 디자인은 안쪽 상의가 보이도록 처리. 긴팔→반팔 시 팔 피부톤과 주름을 얼굴 색 기준으로 조정하세요.",
+        };
+
         const imageParts = [base64ToGenerativePart(personImage, "image/png")];
+        let promptText = basePrompt;
 
         const clothesImages = {
             hatImage,
@@ -82,57 +98,17 @@ export async function POST(req: NextRequest) {
             shoesImage,
         };
 
-        const clothesKoreanMap = {
-            hatImage: "모자",
-            outerwearImage: "아우터",
-            topImage: "상의",
-            bottomImage: "하의",
-            shoesImage: "신발",
-        };
-
-        const providedClothes = [];
-        const promptSegments = [];
-        let imageIndex = 2; // 1 is person
-
         for (const [key, image] of Object.entries(clothesImages)) {
             if (image) {
+                promptText +=
+                    " " + detailedPrompts[key as keyof typeof detailedPrompts];
                 imageParts.push(
                     base64ToGenerativePart(image as string, "image/png"),
                 );
-                const name = clothesKoreanMap[key as keyof typeof clothesKoreanMap];
-                providedClothes.push(name);
-
-                const ordinalMap = {
-                    2: "두 번째",
-                    3: "세 번째",
-                    4: "네 번째",
-                    5: "다섯 번째",
-                    6: "여섯 번째",
-                };
-                const ordinal = ordinalMap[imageIndex as keyof typeof ordinalMap] || `${imageIndex}번째`;
-                promptSegments.push(
-                    `${ordinal} 이미지는 교체할 ${name} 옷입니다.`,
-                );
-                imageIndex++;
             }
         }
 
-        const clothesToChangeText = providedClothes.join(", ");
-
-        let promptText = `첫 번째 이미지는 사람의 전신 사진입니다. ${promptSegments.join(
-            " ",
-        )} 첫 번째 사람 사진의 다른 부분(얼굴, 배경, 자세, 사진의 비율 등)은 그대로 유지한 채, 원래 입고 있던 ${clothesToChangeText} 부분을 각각 제공된 이미지의 것으로 자연스럽게 합성해주세요.`;
-
-        if (topImage) {
-            promptText +=
-                " 만약 긴팔을 입고있는데 반팔 상의로 합성을 해야한다면 얼굴과 손의 피부색을 보고 팔의 색상을 넣어주세요.";
-        }
-        if (bottomImage) {
-            promptText +=
-                " 만약 긴바지를 입고있는데 반바지로 하의를 합성하면 얼굴과 손의 피부색을 보고 다리의 색상을 넣어주세요.";
-        }
-
-        promptText += ` ${clothesToChangeText}만 정확하게 바꿔주세요.`;
+        console.log(promptText);
 
         const allParts = [{ text: promptText }, ...imageParts];
 
