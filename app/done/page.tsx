@@ -8,7 +8,19 @@ import { saveAs } from "file-saver";
 import { Mixpanel } from "@/lib/mixpanel";
 
 export default function DonePage() {
-    const { resultImage, clearAllImages } = useClothesStore();
+    const {
+        resultImage,
+        clearAllImages,
+        personImage,
+        topImage,
+        bottomImage,
+        hatImage,
+        outerwearImage,
+        shoesImage,
+        setIsLoading,
+        setError,
+        setResultImage,
+    } = useClothesStore();
     const router = useRouter();
 
     useEffect(() => {
@@ -26,14 +38,63 @@ export default function DonePage() {
         }
     };
 
+    const handleRegenerate = async () => {
+        Mixpanel.track("done 다시 생성하기");
+        if (
+            personImage &&
+            (topImage || bottomImage || hatImage || outerwearImage || shoesImage)
+        ) {
+            setIsLoading(true);
+            setError(null);
+            router.push("/processing");
+
+            try {
+                const response = await fetch("/api/combine-images", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        personImage,
+                        topImage,
+                        bottomImage,
+                        hatImage,
+                        outerwearImage,
+                        shoesImage,
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to combine images");
+                }
+
+                const data = await response.json();
+                setResultImage(data.result);
+                // When regeneration is successful, stay on the done page with the new image.
+                // The processing page will redirect here.
+            } catch (error) {
+                console.error(error);
+                setError(
+                    error instanceof Error
+                        ? error.message
+                        : "An unknown error occurred",
+                );
+                // If there's an error, we might want to stay on the processing page
+                // or go back to the confirm page. The processing page handles errors.
+            } finally {
+                setIsLoading(false);
+            }
+        } else {
+            // This case should ideally not be reached if resultImage exists
+            // toast.error("다시 생성할 정보가 없어요. 홈으로 이동합니다."); // toast is not imported, so this line is commented out
+            clearAllImages();
+            router.push("/");
+        }
+    };
+
     if (!resultImage) {
         return null; // 리디렉션 중 렌더링 방지
     }
-
-    const handleMainPage = () => {
-        Mixpanel.track("Returned to Main Page");
-        router.push("/");
-    };
 
     return (
         <div className="h-full bg-gray-100 flex items-center justify-center p-0 md:p-8">
@@ -95,22 +156,21 @@ export default function DonePage() {
                 {/* Bottom Navigation */}
                 <div className="w-full p-4 pb-12 bg-white rounded-tl-3xl rounded-tr-3xl inline-flex justify-start items-start gap-1">
                     <button
-                        onClick={handleMainPage}
+                        onClick={handleRegenerate}
                         className="flex-1 self-stretch bg-zinc-100 rounded-tl-[100px] rounded-tr-xl rounded-bl-[100px] rounded-br-xl flex justify-center items-center gap-2.5"
                     >
                         <div className="justify-start text-stone-900 text-base font-semibold font-['Pretendard'] leading-snug">
-                            처음으로 돌아가기
+                            다시 생성하기
                         </div>
                     </button>
                     <button
                         onClick={() => {
-                            Mixpanel.track("confirm 저장 누름");
-                            handleSaveImage();
+                            router.push("/");
                         }}
                         className="flex-1 h-16 py-4 bg-pink-600 rounded-tl-xl rounded-tr-[100px] rounded-bl-xl rounded-br-[100px] inline-flex flex-col justify-center items-center gap-2.5 overflow-hidden"
                     >
                         <div className="justify-start text-white text-base font-semibold font-['Pretendard'] leading-snug">
-                            저장하기
+                            처음으로 돌아가기
                         </div>
                     </button>
                 </div>

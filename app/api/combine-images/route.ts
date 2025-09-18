@@ -49,9 +49,23 @@ function base64ToGenerativePart(base64: string, mimeType: string) {
 
 export async function POST(req: NextRequest) {
     try {
-        const { personImage, topImage, bottomImage } = await req.json();
+        const {
+            personImage,
+            topImage,
+            bottomImage,
+            hatImage,
+            outerwearImage,
+            shoesImage,
+        } = await req.json();
 
-        if (!personImage || (!topImage && !bottomImage)) {
+        if (
+            !personImage ||
+            (!topImage &&
+                !bottomImage &&
+                !hatImage &&
+                !outerwearImage &&
+                !shoesImage)
+        ) {
             return NextResponse.json(
                 { error: "Missing required images" },
                 { status: 400 },
@@ -59,22 +73,66 @@ export async function POST(req: NextRequest) {
         }
 
         const imageParts = [base64ToGenerativePart(personImage, "image/png")];
-        let promptText = "";
 
-        if (topImage && bottomImage) {
-            imageParts.push(base64ToGenerativePart(topImage, "image/png"));
-            imageParts.push(base64ToGenerativePart(bottomImage, "image/png"));
-            promptText =
-                "첫 번째 이미지는 사람의 전신 사진입니다. 두 번째 이미지는 교체할 상의 옷입니다. 세 번째 이미지는 교체할 하의 옷입니다. 첫 번째 사람 사진의 다른 부분(얼굴, 배경, 자세, 사진의 비율 등)은 그대로 유지한 채, 원래 입고 있던 상의와 하의를 각각 두 번째와 세 번째 이미지의 옷으로 자연스럽게 합성해주세요. 만약 긴팔을 입고있는데 반팔 상의로 합성을 해야한다면 얼굴과 손의 피부색을 보고 팔의 색상을 넣어주세요. 만약 긴바지를 입고있는데 반바지로 하의를 합성하면 얼굴과 손의 피부색을 보고 반바지의 색상을 넣어주세요. 옷만 정확하게 바꿔주세요.";
-        } else if (topImage) {
-            imageParts.push(base64ToGenerativePart(topImage, "image/png"));
-            promptText =
-                "첫 번째 이미지는 사람의 전신 사진입니다. 두 번째 이미지는 교체할 상의 옷입니다. 첫 번째 사람 사진의 다른 부분(얼굴, 배경, 자세, 하의, 사진의 비율 등)은 그대로 유지한 채, 원래 입고 있던 상의만 두 번째 이미지의 옷으로 자연스럽게 합성해주세요. 만약 긴팔을 입고있는데 반팔 상의로 합성을 해야한다면 얼굴과 손의 피부색을 보고 팔의 색상을 넣어주세요. 상의만 정확하게 바꿔주세요.";
-        } else if (bottomImage) {
-            imageParts.push(base64ToGenerativePart(bottomImage, "image/png"));
-            promptText =
-                "첫 번째 이미지는 사람의 전신 사진입니다. 두 번째 이미지는 교체할 하의 옷입니다. 첫 번째 사람 사진의 다른 부분(얼굴, 배경, 자세, 상의, 사진의 비율 등)은 그대로 유지한 채, 원래 입고 있던 하의만 두 번째 이미지의 옷으로 자연스럽게 합성해주세요. 만약 긴바지를 입고있는데 반바지로 하의를 합성하면 얼굴과 손의 피부색을 보고 반바지의 색상을 넣어주세요. 하의만 정확하게 바꿔주세요.";
+        const clothesImages = {
+            hatImage,
+            outerwearImage,
+            topImage,
+            bottomImage,
+            shoesImage,
+        };
+
+        const clothesKoreanMap = {
+            hatImage: "모자",
+            outerwearImage: "아우터",
+            topImage: "상의",
+            bottomImage: "하의",
+            shoesImage: "신발",
+        };
+
+        const providedClothes = [];
+        const promptSegments = [];
+        let imageIndex = 2; // 1 is person
+
+        for (const [key, image] of Object.entries(clothesImages)) {
+            if (image) {
+                imageParts.push(
+                    base64ToGenerativePart(image as string, "image/png"),
+                );
+                const name = clothesKoreanMap[key as keyof typeof clothesKoreanMap];
+                providedClothes.push(name);
+
+                const ordinalMap = {
+                    2: "두 번째",
+                    3: "세 번째",
+                    4: "네 번째",
+                    5: "다섯 번째",
+                    6: "여섯 번째",
+                };
+                const ordinal = ordinalMap[imageIndex as keyof typeof ordinalMap] || `${imageIndex}번째`;
+                promptSegments.push(
+                    `${ordinal} 이미지는 교체할 ${name} 옷입니다.`,
+                );
+                imageIndex++;
+            }
         }
+
+        const clothesToChangeText = providedClothes.join(", ");
+
+        let promptText = `첫 번째 이미지는 사람의 전신 사진입니다. ${promptSegments.join(
+            " ",
+        )} 첫 번째 사람 사진의 다른 부분(얼굴, 배경, 자세, 사진의 비율 등)은 그대로 유지한 채, 원래 입고 있던 ${clothesToChangeText} 부분을 각각 제공된 이미지의 것으로 자연스럽게 합성해주세요.`;
+
+        if (topImage) {
+            promptText +=
+                " 만약 긴팔을 입고있는데 반팔 상의로 합성을 해야한다면 얼굴과 손의 피부색을 보고 팔의 색상을 넣어주세요.";
+        }
+        if (bottomImage) {
+            promptText +=
+                " 만약 긴바지를 입고있는데 반바지로 하의를 합성하면 얼굴과 손의 피부색을 보고 다리의 색상을 넣어주세요.";
+        }
+
+        promptText += ` ${clothesToChangeText}만 정확하게 바꿔주세요.`;
 
         const allParts = [{ text: promptText }, ...imageParts];
 

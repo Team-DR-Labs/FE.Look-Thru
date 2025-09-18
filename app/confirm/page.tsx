@@ -11,6 +11,9 @@ export default function ConfirmPage() {
         personImage,
         topImage,
         bottomImage,
+        hatImage,
+        outerwearImage,
+        shoesImage,
         setResultImage,
         setIsLoading,
         setError,
@@ -18,16 +21,37 @@ export default function ConfirmPage() {
     const router = useRouter();
 
     useEffect(() => {
-        if (!personImage || (!topImage && !bottomImage)) {
+        if (
+            !personImage ||
+            (!topImage &&
+                !bottomImage &&
+                !hatImage &&
+                !outerwearImage &&
+                !shoesImage)
+        ) {
             router.replace("/select-clothes");
         }
-    }, [personImage, topImage, bottomImage, router]);
+    }, [
+        personImage,
+        topImage,
+        bottomImage,
+        hatImage,
+        outerwearImage,
+        shoesImage,
+        router,
+    ]);
 
     const handleTryOnClick = async () => {
-        if (personImage && (topImage || bottomImage)) {
+        if (
+            personImage &&
+            (topImage || bottomImage || hatImage || outerwearImage || shoesImage)
+        ) {
             Mixpanel.track("confirm 넘어감", {
                 topImage: !!topImage,
                 bottomImage: !!bottomImage,
+                hatImage: !!hatImage,
+                outerwearImage: !!outerwearImage,
+                shoesImage: !!shoesImage,
             });
             setIsLoading(true);
             setError(null);
@@ -43,6 +67,9 @@ export default function ConfirmPage() {
                         personImage,
                         topImage,
                         bottomImage,
+                        hatImage,
+                        outerwearImage,
+                        shoesImage,
                     }),
                 });
 
@@ -65,7 +92,10 @@ export default function ConfirmPage() {
         }
     };
 
-    if (!personImage || (!topImage && !bottomImage)) {
+    if (
+        !personImage ||
+        (!topImage && !bottomImage && !hatImage && !outerwearImage && !shoesImage)
+    ) {
         return null; // 리디렉션 중 렌더링 방지
     }
 
@@ -131,9 +161,29 @@ export default function ConfirmPage() {
                             />
                         </div>
                     )}
-                    <div className="self-stretch flex-1 inline-flex justify-start items-start gap-2">
+                    <div className="self-stretch flex-1 grid grid-cols-3 gap-2 content-start">
+                        {hatImage && (
+                            <div className="aspect-square relative rounded-2xl overflow-hidden">
+                                <Image
+                                    src={hatImage}
+                                    alt="Hat"
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                        )}
+                        {outerwearImage && (
+                            <div className="aspect-square relative rounded-2xl overflow-hidden">
+                                <Image
+                                    src={outerwearImage}
+                                    alt="Outerwear"
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                        )}
                         {topImage && (
-                            <div className="flex-1 h-44 relative rounded-2xl overflow-hidden">
+                            <div className="aspect-square relative rounded-2xl overflow-hidden">
                                 <Image
                                     src={topImage}
                                     alt="Top"
@@ -143,10 +193,20 @@ export default function ConfirmPage() {
                             </div>
                         )}
                         {bottomImage && (
-                            <div className="flex-1 h-44 relative rounded-2xl overflow-hidden">
+                            <div className="aspect-square relative rounded-2xl overflow-hidden">
                                 <Image
                                     src={bottomImage}
                                     alt="Bottom"
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                        )}
+                        {shoesImage && (
+                            <div className="aspect-square relative rounded-2xl overflow-hidden">
+                                <Image
+                                    src={shoesImage}
+                                    alt="Shoes"
                                     fill
                                     className="object-cover"
                                 />
