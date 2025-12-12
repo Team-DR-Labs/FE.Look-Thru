@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@apps-in-toss/web-framework": "^1.4.3",
     "@google/generative-ai": "^0.24.1",
     "file-saver": "^2.0.5",
     "mixpanel-browser": "^2.70.0",

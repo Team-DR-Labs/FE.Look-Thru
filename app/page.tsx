@@ -5,6 +5,7 @@ import { useClothesStore } from "../stores/clothesStore";
 import { useEffect } from "react";
 import Image from "next/image";
 import { Mixpanel } from "@/lib/mixpanel";
+import { isTossInApp, shareContent, triggerHaptic } from "@/lib/tossInApp";
 
 export default function Home() {
     const router = useRouter();
@@ -14,9 +15,25 @@ export default function Home() {
         clearAllImages();
     }, [clearAllImages]);
 
-    const handleStartClick = () => {
+    const handleStartClick = async () => {
         Mixpanel.track("intro 넘어감");
+
+        // 토스 인앱에서 햅틱 피드백
+        if (isTossInApp()) {
+            await triggerHaptic("light");
+        }
+
         router.push("/select-clothes");
+    };
+
+    const handleShare = async () => {
+        Mixpanel.track("공유하기 클릭");
+
+        await shareContent(
+            "LookThru - AI 가상 피팅",
+            "망설임은 이제 그만, 직접 눈으로 확인해보세요! AI 기반 가상 피팅 서비스 LookThru",
+            window.location.href
+        );
     };
 
     return (
@@ -101,6 +118,25 @@ export default function Home() {
                             <div className="justify-start text-white text-base font-semibold leading-snug">
                                 시작하기
                             </div>
+                        </button>
+                        <button
+                            onClick={handleShare}
+                            className="text-gray-600 text-sm font-medium leading-tight hover:text-gray-800 flex items-center gap-1"
+                        >
+                            <span>공유하기</span>
+                            <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M13 10.5C12.4 10.5 11.85 10.7 11.4 11.05L5.45 7.5C5.48 7.33 5.5 7.17 5.5 7C5.5 6.83 5.48 6.67 5.45 6.5L11.35 2.97C11.82 3.35 12.39 3.57 13 3.57C14.38 3.57 15.5 2.45 15.5 1.07C15.5 -0.31 14.38 -1.43 13 -1.43C11.62 -1.43 10.5 -0.31 10.5 1.07C10.5 1.24 10.52 1.4 10.55 1.57L4.65 5.1C4.18 4.72 3.61 4.5 3 4.5C1.62 4.5 0.5 5.62 0.5 7C0.5 8.38 1.62 9.5 3 9.5C3.61 9.5 4.18 9.28 4.65 8.9L10.6 12.45C10.57 12.6 10.55 12.75 10.55 12.9C10.55 14.23 11.67 15.35 13 15.35C14.33 15.35 15.45 14.23 15.45 12.9C15.45 11.57 14.33 10.5 13 10.5Z"
+                                    transform="translate(0.25 0.65)"
+                                    fill="currentColor"
+                                />
+                            </svg>
                         </button>
                         <a
                             href="https://lookthru.hashnode.space/default-guide/6rcc7j247kcv67o07lky66as67cp7lmo"
