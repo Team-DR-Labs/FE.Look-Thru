@@ -44,4 +44,5 @@ jobs:
             --region ${{ env.REGION }} \
             --platform managed \
             --allow-unauthenticated \
+            --clear-secrets \
             --set-env-vars "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}"
