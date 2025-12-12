@@ -43,6 +43,4 @@ jobs:
             --image ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/cloud-run-source-deploy/${{ env.SERVICE_NAME }}:${{ github.sha }} \
             --region ${{ env.REGION }} \
             --platform managed \
-            --allow-unauthenticated \
-            --clear-secrets \
-            --set-env-vars "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}"
+            --allow-unauthenticated
