@@ -1,7 +1,7 @@
 {
   "name": "look-thru",
   "version": "0.1.0",
-  "description": "Look-Thru Application",
+  "description": "Look-Thru - Virtual Try-On Application",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
